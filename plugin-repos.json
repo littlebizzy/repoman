@@ -266,6 +266,20 @@
     "compatible": true
   },
   {
+    "slug": "redis-cache",
+    "name": "Redis Cache",
+    "description": "A persistent object cache backend powered by Redis. Supports Predis, PhpRedis, Relay, replication, sentinels, clustering and WP-CLI.",
+    "author": "Till Krüss",
+    "author_url": "https://objectcache.pro",
+    "repo": "rhubarbgroup/redis-cache",
+    "icon_url": "https://avatars.githubusercontent.com/u/63673215",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "redux-framework",
     "name": "Redux Framework",
     "description": "Build better sites in WordPress fast!",
