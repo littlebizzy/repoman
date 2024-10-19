@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.6.3
+- added `rhubarbgroup/redis-cache`
+
 ### 1.6.2
 - added `discourse/wp-discourse`
 
