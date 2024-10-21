@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.6.4
+- fixed broken php tag
+
 ### 1.6.3
 - added `rhubarbgroup/redis-cache`
 
