@@ -1,5 +1,19 @@
 [
   {
+    "slug": "404-to-homepage",
+    "name": "404 To Homepage",
+    "description": "Redirects 404 errors to homepage",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/404-to-homepage",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "anonymous-bbpress",
     "name": "Anonymous bbPress",
     "description": "Anonymous bbPress guest posting",
