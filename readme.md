@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.6.5
+- added `littlebizzy/404-to-homepage`
+
 ### 1.6.4
 - fixed broken php tag
 
