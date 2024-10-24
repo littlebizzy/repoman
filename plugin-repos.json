@@ -98,6 +98,20 @@
     "compatible": true
   },
   {
+    "slug": "disable-emojis",
+    "name": "Disable Emojis",
+    "description": "Disables emoji assets and unicode",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/disable-emojis",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "disable-empty-trash",
     "name": "Disable Empty Trash",
     "description": "Stops WordPress emptying trash",
