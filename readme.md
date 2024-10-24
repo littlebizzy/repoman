@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.6.6
+- added `littlebizzy/disable-emojis`
+
 ### 1.6.5
 - added `littlebizzy/404-to-homepage`
 
