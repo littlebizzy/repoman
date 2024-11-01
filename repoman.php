@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 1.6.6
+Version: 1.7.0
 Requires PHP: 7.0
 Author: LittleBizzy
 Author URI: https://www.littlebizzy.com
@@ -57,16 +57,30 @@ function scan_plugin_main_file_for_github_uri( $plugin_file ) {
     return $github_uri_found;
 }
 
-// dynamically block updates for plugins with 'GitHub Plugin URI'
+// array of specific plugin slugs to block updates
+function get_blocked_plugin_slugs() {
+    return array(
+        'advanced-custom-fields',
+        'another-plugin-slug', // add more slugs as needed
+    );
+}
+
+// disable updates for plugins with 'GitHub Plugin URI' and specified slugs
 function dynamic_block_plugin_updates( $overrides ) {
-    // Get all installed plugins (active and inactive)
+    // get all installed plugins (active and inactive)
     $all_plugins = get_plugins();
 
-    // Loop through each plugin and scan the main file for the 'GitHub Plugin URI' string
+    // array of blocked slugs
+    $blocked_slugs = get_blocked_plugin_slugs();
+
+    // loop through each plugin and check for 'GitHub Plugin URI' or blocked slugs
     foreach ( $all_plugins as $plugin_file => $plugin_data ) {
-        // Scan the main plugin file for 'GitHub Plugin URI'
-        if ( scan_plugin_main_file_for_github_uri( $plugin_file ) ) {
-            $overrides[] = $plugin_file; // Add to overrides if 'GitHub Plugin URI' is found
+        // extract the slug from the plugin file path
+        $slug = dirname( $plugin_file );
+
+        // block if 'GitHub Plugin URI' string exists or if slug is in the blocked array
+        if ( scan_plugin_main_file_for_github_uri( $plugin_file ) || in_array( $slug, $blocked_slugs, true ) ) {
+            $overrides[] = $plugin_file;
         }
     }
 
@@ -77,11 +91,14 @@ add_filter( 'gu_override_dot_org', 'dynamic_block_plugin_updates', 999 );
 // Ensure this applies even if plugins are deactivated
 function dynamic_block_deactivated_plugin_updates( $transient ) {
     $overrides = apply_filters( 'gu_override_dot_org', [] );
+
+    // Loop through the plugins in the transient and remove if in overrides
     foreach ( $overrides as $plugin ) {
         if ( isset( $transient->response[ $plugin ] ) ) {
             unset( $transient->response[ $plugin ] );
         }
     }
+
     return $transient;
 }
 add_filter( 'site_transient_update_plugins', 'dynamic_block_deactivated_plugin_updates' );
