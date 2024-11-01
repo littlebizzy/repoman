@@ -31,27 +31,27 @@ function repoman_load_textdomain() {
 }
 add_action( 'plugins_loaded', 'repoman_load_textdomain' );
 
-// Scan the main plugin file for the 'GitHub Plugin URI' string
+// scan the main plugin file for the 'GitHub Plugin URI' string
 function scan_plugin_main_file_for_github_uri( $plugin_file ) {
     $github_uri_found = false;
     $plugin_file_path = WP_PLUGIN_DIR . '/' . $plugin_file;
 
-    // Check if the plugin file exists and is readable
+    // check if the plugin file exists and is readable
     if ( file_exists( $plugin_file_path ) && is_readable( $plugin_file_path ) ) {
         $file_content = @file_get_contents( $plugin_file_path );
         
-        // If the file couldn't be read, log the error and skip
+        // if the file couldn't be read, log the error and skip
         if ( false === $file_content ) {
-            error_log("Failed to read plugin file: " . $plugin_file_path . ". This might be due to file permissions or corruption.");
+            error_log( "Failed to read plugin file: " . $plugin_file_path . ". This might be due to file permissions or corruption." );
         } else {
-            // Check if the 'GitHub Plugin URI' string exists in the file (case-sensitive)
+            // check if the 'GitHub Plugin URI' string exists in the file (case-sensitive)
             if ( strpos( $file_content, 'GitHub Plugin URI' ) !== false ) {
                 $github_uri_found = true;
             }
         }
     } else {
-        // Log if the plugin file is not accessible
-        error_log("Plugin file does not exist or is not readable: " . $plugin_file_path);
+        // log if the plugin file is not accessible
+        error_log( "Plugin file does not exist or is not readable: " . $plugin_file_path );
     }
 
     return $github_uri_found;
@@ -88,11 +88,11 @@ function dynamic_block_plugin_updates( $overrides ) {
 }
 add_filter( 'gu_override_dot_org', 'dynamic_block_plugin_updates', 999 );
 
-// Ensure this applies even if plugins are deactivated
+// ensure this applies even if plugins are deactivated
 function dynamic_block_deactivated_plugin_updates( $transient ) {
     $overrides = apply_filters( 'gu_override_dot_org', [] );
 
-    // Loop through the plugins in the transient and remove if in overrides
+    // loop through the plugins in the transient and remove if in overrides
     foreach ( $overrides as $plugin ) {
         if ( isset( $transient->response[ $plugin ] ) ) {
             unset( $transient->response[ $plugin ] );
