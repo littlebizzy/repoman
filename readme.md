@@ -4,6 +4,10 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.7.0
+- new functionality to block wordpress.org updates from specific array of plugin slugs
+- `advanced-custom-fields` is the first plugin added to this array
+
 ### 1.6.6
 - added `littlebizzy/disable-emojis`
 
