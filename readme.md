@@ -4,6 +4,11 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.7.1
+- added `repoman` to skipped plugin namespace array
+- added `git-updater` to skipped plugin namespace array
+- added `wpe-secure-updater` to skipped plugin namespace array
+
 ### 1.7.0
 - new functionality to block wordpress.org updates from specified array of plugin slugs
 - `advanced-custom-fields` is the first plugin added to this array
