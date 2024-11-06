@@ -60,6 +60,9 @@ function scan_plugin_main_file_for_github_uri( $plugin_file ) {
 // array of specific plugin slugs to block updates
 function get_blocked_plugin_slugs() {
     return array(
+        'repoman',
+        'git-updater',
+        'wpe-secure-updater',
         'advanced-custom-fields',
         'another-plugin-slug', // add more slugs as needed
     );
