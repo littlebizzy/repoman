@@ -336,6 +336,20 @@
     "compatible": true
   },
   {
+    "slug": "wp-api-privacy",
+    "name": "WP API Privacy",
+    "description": "Strips potentially identifying information from outbound requests to the WordPress.org API",
+    "author": "Duane Storey",
+    "author_url": "https://duanestorey.com",
+    "repo": "wp-privacy/wp-api-privacy",
+    "icon_url": "https://avatars.githubusercontent.com/u/187593277",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "wp-cloud-deploy",
     "name": "WPCloudDeploy",
     "description": "Deploy and manage cloud servers and apps from inside the WordPress Admin dashboard",
