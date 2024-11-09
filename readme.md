@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.7.2
+- added `wp-privacy/wp-api-privacy`
+
 ### 1.7.1
 - added `repoman` to skipped plugin namespace array
 - added `git-updater` to skipped plugin namespace array
