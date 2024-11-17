@@ -5,7 +5,7 @@ Install public repos to WordPress
 ## Changelog
 
 ### 1.7.3
-- added `robertdevore/custom-update-request-modifier` (first plugin without Git Updater support for testing)
+- added `robertdevore/custom-update-request-modifier` (first plugin without Git Updater support)
 
 ### 1.7.2
 - added `wp-privacy/wp-api-privacy`
