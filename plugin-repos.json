@@ -70,6 +70,20 @@
     "compatible": true
   },
   {
+    "slug": "custom-update-request-modifier",
+    "name": "Custom Update Request Modifier",
+    "description": "Modifies the user-agent string in HTTP requests for theme, plugin, core, and other WordPress API requests. Allows custom API URL configuration, logs request details including headers and body, and excludes non-WordPress.org plugins from update checks.",
+    "author": "Robert DeVore",
+    "author_url": "https://robertdevore.com",
+    "repo": "robertdevore/custom-update-request-modifier",
+    "icon_url": "https://avatars.githubusercontent.com/u/9917957",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "disable-author-pages",
     "name": "Disable Author Pages",
     "description": "Disables author pages and links",
