@@ -28,6 +28,20 @@
     "compatible": true
   },
   {
+    "slug": "benchpress",
+    "name": "BenchPress",
+    "description": "BenchPress is a WordPress plugin for benchmarking PHP code snippets, WordPress queries, and other critical operations.",
+    "author": "Robert DeVore",
+    "author_url": "https://robertdevore.com",
+    "repo": "robertdevore/benchpress",
+    "icon_url": "https://avatars.githubusercontent.com/u/9917957",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "biscotti",
     "name": "Biscotti",
     "description": "Biscotti makes your user's login cookie a little bit longer.",
@@ -210,6 +224,20 @@
     "compatible": true
   },
   {
+    "slug": "email-validator-for-wordpress",
+    "name": "Email Validator for WordPress",
+    "description": "A plugin that stops user registration if the email address has more numbers than a specified limit (configurable). It also works for WooCommerce registration if WooCommerce is active.",
+    "author": "Robert DeVore",
+    "author_url": "https://robertdevore.com",
+    "repo": "robertdevore/email-validator-for-wordpress",
+    "icon_url": "https://avatars.githubusercontent.com/u/9917957",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "force-https",
     "name": "Force HTTPS",
     "description": "HTTPS enforcement for WordPress",
@@ -217,6 +245,34 @@
     "author_url": "https://www.littlebizzy.com",
     "repo": "littlebizzy/force-https",
     "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
+    "slug": "frontend-post-order",
+    "name": "Frontend Post Order",
+    "description": "A plugin to let you re-order posts on the frontend.",
+    "author": "Robert DeVore",
+    "author_url": "https://robertdevore.com",
+    "repo": "robertdevore/frontend-post-order",
+    "icon_url": "https://avatars.githubusercontent.com/u/9917957",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
+    "slug": "gift-cards-for-woocommerce",
+    "name": "Gift Cards for WooCommerce",
+    "description": "Add robust gift card functionality to your WooCommerce powered store.",
+    "author": "Robert DeVore",
+    "author_url": "https://robertdevore.com",
+    "repo": "robertdevore/gift-cards-for-woocommerce",
+    "icon_url": "https://avatars.githubusercontent.com/u/9917957",
     "rating": 4.8,
     "ratings_count": 100,
     "active_installs": 5000,
