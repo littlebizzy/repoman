@@ -4,8 +4,15 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.7.4
+- added `robertdevore/benchpress`
+- added `robertdevore/email-validator-for-wordpress`
+- added `robertdevore/frontend-post-order`
+- added `robertdevore/gift-cards-for-woocommerce`
+
 ### 1.7.3
 - added `robertdevore/custom-update-request-modifier` (first plugin without Git Updater support)
+- Note: plugins without Git Updater headers can't be protected from WP.org overwrites
 
 ### 1.7.2
 - added `wp-privacy/wp-api-privacy`
