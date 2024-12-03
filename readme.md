@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.7.5
+- added `littlebizzy/disable-cart-fragments`
+
 ### 1.7.4
 - added `robertdevore/benchpress`
 - added `robertdevore/email-validator-for-wordpress`
