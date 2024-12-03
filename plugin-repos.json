@@ -112,6 +112,20 @@
     "compatible": true
   },
   {
+    "slug": "disable-cart-fragments",
+    "name": "Disable Cart Fragments",
+    "description": "Disables AJAX fragments in Woo",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/disable-cart-fragments",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "disable-comments",
     "name": "Disable Comments",
     "description": "Disables comments without database",
