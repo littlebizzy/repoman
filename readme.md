@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.7.6
+- added `littlebizzy/metadata`
+
 ### 1.7.5
 - added `littlebizzy/disable-cart-fragments`
 
