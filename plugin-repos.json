@@ -294,6 +294,20 @@
     "compatible": true
   },
   {
+    "slug": "metadata",
+    "name": "Metadata",
+    "description": "For custom titles and descriptions",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/metadata",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "miso-wordpress-plugin",
     "name": "Miso AI",
     "description": "The official WordPress plugin for Miso AI data integration.",
