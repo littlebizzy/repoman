@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 1.7.6
+Version: 1.8.0
 Requires PHP: 7.0
 Author: LittleBizzy
 Author URI: https://www.littlebizzy.com
@@ -57,6 +57,32 @@ function scan_plugin_main_file_for_github_uri( $plugin_file ) {
     return $github_uri_found;
 }
 
+// scan the main plugin file for the 'Update URI' string
+function scan_plugin_main_file_for_update_uri( $plugin_file ) {
+    $update_uri_found = false;
+    $plugin_file_path = WP_PLUGIN_DIR . '/' . $plugin_file;
+
+    // check if the plugin file exists and is readable
+    if ( file_exists( $plugin_file_path ) && is_readable( $plugin_file_path ) ) {
+        $file_content = @file_get_contents( $plugin_file_path );
+
+        // if the file couldn't be read, log the error and skip
+        if ( false === $file_content ) {
+            error_log( "Failed to read plugin file: " . $plugin_file_path . ". This might be due to file permissions or corruption." );
+        } else {
+            // check if the 'Update URI' string exists in the file (case-sensitive)
+            if ( strpos( $file_content, 'Update URI' ) !== false ) {
+                $update_uri_found = true;
+            }
+        }
+    } else {
+        // log if the plugin file is not accessible
+        error_log( "Plugin file does not exist or is not readable: " . $plugin_file_path );
+    }
+
+    return $update_uri_found;
+}
+
 // array of specific plugin slugs to block updates
 function get_blocked_plugin_slugs() {
     return array(
@@ -64,11 +90,11 @@ function get_blocked_plugin_slugs() {
         'git-updater',
         'wpe-secure-updater',
         'advanced-custom-fields',
-        'another-plugin-slug', // add more slugs as needed
+        'plugin-update-checker', // add more slugs as needed
     );
 }
 
-// disable updates for plugins with 'GitHub Plugin URI' and specified slugs
+// disable updates for plugins with 'GitHub Plugin URI', 'Update URI', and specified slugs
 function dynamic_block_plugin_updates( $overrides ) {
     // get all installed plugins (active and inactive)
     $all_plugins = get_plugins();
@@ -76,13 +102,13 @@ function dynamic_block_plugin_updates( $overrides ) {
     // array of blocked slugs
     $blocked_slugs = get_blocked_plugin_slugs();
 
-    // loop through each plugin and check for 'GitHub Plugin URI' or blocked slugs
+    // loop through each plugin and check for 'GitHub Plugin URI', 'Update URI', or blocked slugs
     foreach ( $all_plugins as $plugin_file => $plugin_data ) {
         // extract the slug from the plugin file path
         $slug = dirname( $plugin_file );
 
-        // block if 'GitHub Plugin URI' string exists or if slug is in the blocked array
-        if ( scan_plugin_main_file_for_github_uri( $plugin_file ) || in_array( $slug, $blocked_slugs, true ) ) {
+        // block if 'GitHub Plugin URI' or 'Update URI' string exists or if slug is in the blocked array
+        if ( scan_plugin_main_file_for_github_uri( $plugin_file ) || scan_plugin_main_file_for_update_uri( $plugin_file ) || in_array( $slug, $blocked_slugs, true ) ) {
             $overrides[] = $plugin_file;
         }
     }
@@ -612,3 +638,5 @@ function repoman_extend_search_results( $res, $action, $args ) {
 add_filter( 'plugins_api_result', 'repoman_extend_search_results', 12, 3 );
 
 // Ref: ChatGPT
+// Ref: https://make.wordpress.org/core/2021/06/29/introducing-update-uri-plugin-header-in-wordpress-5-8/
+// Ref: https://github.com/YahnisElsts/plugin-update-checker/issues/581
