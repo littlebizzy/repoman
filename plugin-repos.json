@@ -378,6 +378,20 @@
     "compatible": true
   },
   {
+    "slug": "random-post-ids",
+    "name": "Random Post IDs",
+    "description": "Random 7-digit IDs for usability",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/random-post-ids",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "recrawler",
     "name": "ReCrawler",
     "description": "ReCrawler is a small WordPress Plugin for quickly notifying search engines whenever their website content is created, updated, or deleted.",
