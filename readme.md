@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.8.1
+- added `littlebizzy/random-post-ids`
+
 ### 1.8.0
 - now blocks plugins with `Update URI` string from WP.org (same as `GitHub Plugin URI`)
 - `plugin-update-checker` also hardcode protected from WP.org overwrites
