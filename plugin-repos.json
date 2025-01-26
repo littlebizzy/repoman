@@ -448,6 +448,20 @@
     "compatible": true
   },
   {
+    "slug": "woo-product-table",
+    "name": "Woo Product Table",
+    "description": "WooCommerce product table plugin helps you to display your products in a searchable table layout with filters. Boost conversions & sales. Woo Product Table is best for Wholesale.",
+    "author": "CodeAstrology Team",
+    "author_url": "https://wooproducttable.com",
+    "repo": "codersaiful/woo-product-table",
+    "icon_url": "https://avatars.githubusercontent.com/u/6463919",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "wp-api-privacy",
     "name": "WP API Privacy",
     "description": "Strips potentially identifying information from outbound requests to the WordPress.org API",
