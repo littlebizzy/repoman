@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.8.2
+- added `codersaiful/woo-product-table`
+
 ### 1.8.1
 - added `littlebizzy/random-post-ids`
 
