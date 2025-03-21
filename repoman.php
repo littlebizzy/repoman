@@ -3,15 +3,17 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 1.8.2
+Version: 1.8.3
 Requires PHP: 7.0
+Tested up to: 6.7
 Author: LittleBizzy
 Author URI: https://www.littlebizzy.com
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
-Text Domain: repoman
+Update URI: false
 GitHub Plugin URI: littlebizzy/repoman
 Primary Branch: master
+Text Domain: repoman
 */
 
 // prevent direct access
