@@ -5,7 +5,7 @@ Install public repos to WordPress
 ## Changelog
 
 ### 1.8.3
-- added `littlebizy/disable-search`
+- added `littlebizzy/disable-search`
 - removed `littlebizzy/disable-gutenberg` (not ready yet)
 - added `Tested up to` plugin header
 - added `Update URI` plugin header
