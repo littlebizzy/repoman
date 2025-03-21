@@ -7,6 +7,8 @@ Install public repos to WordPress
 ### 1.8.3
 - added `littlebizy/disable-search`
 - removed `littlebizzy/disable-gutenberg` (not ready yet)
+- added `Tested up to` plugin header
+- added `Update URI` plugin header
 
 ### 1.8.2
 - added `codersaiful/woo-product-table`
