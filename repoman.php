@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// disable wordpress.org updates for this plugin
+// override wordpress.org with git updater
 add_filter( 'gu_override_dot_org', function( $overrides ) {
     $overrides[] = 'repoman/repoman.php';
     return $overrides;
