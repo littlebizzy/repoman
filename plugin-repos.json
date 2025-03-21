@@ -182,12 +182,12 @@
     "compatible": true
   },
   {
-    "slug": "disable-gutenberg",
-    "name": "Disable Gutenberg",
-    "description": "Disables block editor entirely",
+    "slug": "disable-image-compression",
+    "name": "Disable Image Compression",
+    "description": "Disables all JPEG compression",
     "author": "LittleBizzy",
     "author_url": "https://www.littlebizzy.com",
-    "repo": "littlebizzy/disable-gutenberg",
+    "repo": "littlebizzy/disable-image-compression",
     "icon_url": "https://avatars.githubusercontent.com/u/10787477",
     "rating": 4.8,
     "ratings_count": 100,
@@ -196,12 +196,12 @@
     "compatible": true
   },
   {
-    "slug": "disable-image-compression",
-    "name": "Disable Image Compression",
-    "description": "Disables all JPEG compression",
+    "slug": "disable-search",
+    "name": "Disable Search",
+    "description": "Totally disables WordPress search",
     "author": "LittleBizzy",
     "author_url": "https://www.littlebizzy.com",
-    "repo": "littlebizzy/disable-image-compression",
+    "repo": "littlebizzy/disable-search",
     "icon_url": "https://avatars.githubusercontent.com/u/10787477",
     "rating": 4.8,
     "ratings_count": 100,
