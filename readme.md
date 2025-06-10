@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.8.4
+- added `littlebizzy/contact-form`
+
 ### 1.8.3
 - added `littlebizzy/disable-search`
 - removed `littlebizzy/disable-gutenberg` (not ready yet)
