@@ -84,6 +84,20 @@
     "compatible": true
   },
   {
+    "slug": "contact-form",
+    "name": "Contact Form",
+    "description": "Intuitive WordPress contact form",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/contact-form",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "active_installs": 5000,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "custom-update-request-modifier",
     "name": "Custom Update Request Modifier",
     "description": "Modifies the user-agent string in HTTP requests for theme, plugin, core, and other WordPress API requests. Allows custom API URL configuration, logs request details including headers and body, and excludes non-WordPress.org plugins from update checks.",
