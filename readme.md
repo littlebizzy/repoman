@@ -4,6 +4,10 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.8.6
+- prefixed plugin slugs with `repoman-` to enable targeted CSS
+- hid star ratings and active install counts only for RepoMan results
+
 ### 1.8.5
 - removed `active_installs` from plugin data and display
 - added CSS to hide install count div in search result tiles
