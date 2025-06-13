@@ -643,6 +643,11 @@ function repoman_extend_search_results( $res, $action, $args ) {
 }
 add_filter( 'plugins_api_result', 'repoman_extend_search_results', 12, 3 );
 
+// hide active installs text but preserve layout spacing
+add_action( 'admin_head', function() {
+	echo '<style>.column-downloaded { visibility: hidden; }</style>';
+} );
+
 // Ref: ChatGPT
 // Ref: https://make.wordpress.org/core/2021/06/29/introducing-update-uri-plugin-header-in-wordpress-5-8/
 // Ref: https://github.com/YahnisElsts/plugin-update-checker/issues/581
