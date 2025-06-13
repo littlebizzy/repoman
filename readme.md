@@ -4,6 +4,11 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.8.5
+- removed `active_installs` from plugin data and display
+- added CSS to hide install count div in search result tiles
+- linked author names to GitHub repos instead of plain text
+
 ### 1.8.4
 - added `littlebizzy/contact-form`
 
