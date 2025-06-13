@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 1.8.5
+Version: 1.8.6
 Requires PHP: 7.0
 Tested up to: 6.7
 Author: LittleBizzy
@@ -506,7 +506,8 @@ function repoman_prepare_plugin_for_display( $plugin ) {
         'id'                            => $plugin['slug'],
         'type'                          => 'plugin',
         'name'                          => sanitize_text_field( $plugin['name'] ),
-        'slug'                          => sanitize_title( $plugin['slug'] ),
+        // 'slug' => sanitize_title( $plugin['slug'] ),
+		'slug' => 'repoman-' . sanitize_title( $plugin['slug'] ),
         'version'                       => sanitize_text_field( $plugin['version'] ),
         // 'author'                        => sanitize_text_field( $plugin['author'] ),
         'author' => ! empty( $plugin['repo'] )
@@ -646,9 +647,17 @@ function repoman_extend_search_results( $res, $action, $args ) {
 }
 add_filter( 'plugins_api_result', 'repoman_extend_search_results', 12, 3 );
 
-// hide active installs text but preserve layout spacing
+// hide active installs and star ratings for repoman results only
 add_action( 'admin_head', function() {
-	echo '<style>.column-downloaded { visibility: hidden; }</style>';
+	echo '<style>
+		.plugin-card[class*="plugin-card-repoman-"] .column-downloaded {
+			visibility: hidden;
+		}
+		.plugin-card[class*="plugin-card-repoman-"] .star-rating,
+		.plugin-card[class*="plugin-card-repoman-"] .num-ratings {
+			visibility: hidden;
+		}
+	</style>';
 } );
 
 // Ref: ChatGPT
