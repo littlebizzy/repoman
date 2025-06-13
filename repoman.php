@@ -427,7 +427,7 @@ function repoman_normalize_plugin_data( $plugin ) {
         'num_ratings'     => 0,
         'repo'            => '',
         'last_updated'    => __( 'Unknown', 'repoman' ),
-        'active_installs' => 0,
+        // 'active_installs' => 0,
         'description'     => __( 'No description available.', 'repoman' ),
         'icon_url'        => '',
     );
@@ -494,6 +494,10 @@ function repoman_calculate_match_score( $plugin, $search_query ) {
 function repoman_prepare_plugin_for_display( $plugin ) {
     // normalize the plugin data
     $plugin = repoman_normalize_plugin_data( $plugin );
+
+    // remove active_installs to hide 0+
+    unset( $plugin['active_installs'] );
+
     // get the download link for the plugin
     $download_link = repoman_get_plugin_download_link( $plugin );
 
@@ -514,7 +518,7 @@ function repoman_prepare_plugin_for_display( $plugin ) {
         'num_ratings'                   => intval( $plugin['num_ratings'] ),
         'support_threads'               => 0,
         'support_threads_resolved'      => 0,
-        'active_installs'               => intval( $plugin['active_installs'] ),
+        // 'active_installs'               => intval( $plugin['active_installs'] ),
         'short_description'             => wp_kses_post( $plugin['description'] ),
         'sections'                      => array(
             'description' => wp_kses_post( $plugin['description'] ),
