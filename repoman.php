@@ -508,7 +508,10 @@ function repoman_prepare_plugin_for_display( $plugin ) {
         'name'                          => sanitize_text_field( $plugin['name'] ),
         'slug'                          => sanitize_title( $plugin['slug'] ),
         'version'                       => sanitize_text_field( $plugin['version'] ),
-        'author'                        => sanitize_text_field( $plugin['author'] ),
+        // 'author'                        => sanitize_text_field( $plugin['author'] ),
+        'author' => ! empty( $plugin['repo'] )
+            ? '<a href="https://github.com/' . esc_attr( $plugin['repo'] ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $plugin['author'] ) . '</a>'
+            : sanitize_text_field( $plugin['author'] ),
         'author_profile'                => ! empty( $plugin['author_url'] ) ? esc_url( $plugin['author_url'] ) : '',
         'contributors'                  => array(),
         'requires'                      => '',
