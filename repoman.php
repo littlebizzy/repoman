@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 1.8.6
+Version: 1.8.7
 Requires PHP: 7.0
 Tested up to: 6.7
 Author: LittleBizzy
@@ -177,7 +177,7 @@ function repoman_get_plugins_data() {
         $plugin['rating']          = isset( $plugin['rating'] ) ? intval( $plugin['rating'] ) : 0;
         $plugin['num_ratings']     = isset( $plugin['num_ratings'] ) ? intval( $plugin['num_ratings'] ) : 0;
         $plugin['last_updated']    = isset( $plugin['last_updated'] ) ? sanitize_text_field( $plugin['last_updated'] ) : __( 'unknown', 'repoman' );
-        // $plugin['active_installs'] = isset( $plugin['active_installs'] ) ? intval( $plugin['active_installs'] ) : 0;
+        $plugin['active_installs'] = isset( $plugin['active_installs'] ) ? intval( $plugin['active_installs'] ) : 0;
         $plugin['compatible']      = isset( $plugin['compatible'] ) ? (bool) $plugin['compatible'] : false;
     }
 
@@ -265,6 +265,7 @@ function repoman_prepare_plugin_information( $plugin ) {
         'last_updated'      => sanitize_text_field( $plugin['last_updated'] ),
         'homepage'          => ! empty( $plugin['author_url'] ) ? esc_url( $plugin['author_url'] ) : '',
         'short_description' => wp_kses_post( $plugin['description'] ),
+		'active_installs'   => 0,
         'icons'             => array(
             'default' => ! empty( $plugin['icon_url'] ) ? esc_url( $plugin['icon_url'] ) : '',
         ),
@@ -427,7 +428,7 @@ function repoman_normalize_plugin_data( $plugin ) {
         'num_ratings'     => 0,
         'repo'            => '',
         'last_updated'    => __( 'Unknown', 'repoman' ),
-        // 'active_installs' => 0,
+        'active_installs' => 0,
         'description'     => __( 'No description available.', 'repoman' ),
         'icon_url'        => '',
     );
@@ -496,7 +497,7 @@ function repoman_prepare_plugin_for_display( $plugin ) {
     $plugin = repoman_normalize_plugin_data( $plugin );
 
     // remove active_installs to hide 0+
-    unset( $plugin['active_installs'] );
+    // unset( $plugin['active_installs'] );
 
     // get the download link for the plugin
     $download_link = repoman_get_plugin_download_link( $plugin );
@@ -523,6 +524,7 @@ function repoman_prepare_plugin_for_display( $plugin ) {
         'support_threads'               => 0,
         'support_threads_resolved'      => 0,
         // 'active_installs'               => intval( $plugin['active_installs'] ),
+		'active_installs'               => 0,
         'short_description'             => wp_kses_post( $plugin['description'] ),
         'sections'                      => array(
             'description' => wp_kses_post( $plugin['description'] ),
