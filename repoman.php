@@ -95,12 +95,12 @@ function dynamic_block_plugin_updates( $overrides ) {
     // get all installed plugins (active and inactive)
     $all_plugins = get_plugins();
 
-    // array of blocked slugs
+    // get array of blocked slugs
     $blocked_slugs = get_blocked_plugin_slugs();
 
-    // loop through each plugin and check for 'GitHub Plugin URI', 'Update URI', or blocked slugs
+    // loop through each plugin
     foreach ( $all_plugins as $plugin_file => $plugin_data ) {
-        // extract the slug from the plugin file path
+        // get the plugin slug from its path
         $slug = dirname( $plugin_file );
 
         // block if 'GitHub Plugin URI' or 'Update URI' string exists or if slug is in the blocked array
@@ -115,9 +115,10 @@ add_filter( 'gu_override_dot_org', 'dynamic_block_plugin_updates', 999 );
 
 // ensure this applies even if plugins are deactivated
 function dynamic_block_deactivated_plugin_updates( $transient ) {
+    // get override list via filter
     $overrides = apply_filters( 'gu_override_dot_org', [] );
 
-    // loop through the plugins in the transient and remove if in overrides
+    // loop through plugins and remove if in overrides
     foreach ( $overrides as $plugin ) {
         if ( isset( $transient->response[ $plugin ] ) ) {
             unset( $transient->response[ $plugin ] );
