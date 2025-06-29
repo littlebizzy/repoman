@@ -183,17 +183,18 @@ function repoman_get_plugins_data() {
 
 // fetch plugin data with caching via transients
 function repoman_get_plugins_data_with_cache() {
+    // get cached plugin data
     $plugins = get_transient( 'repoman_plugins' );
 
-    // check if cached data exists
-    if ( false === $plugins ) {
+    // fetch fresh data if cache is missing
+    if ( $plugins === false ) {
         $plugins = repoman_get_plugins_data();
 
-        // set the transient cache if no errors
+        // set transient if no error
         if ( ! is_wp_error( $plugins ) ) {
             set_transient( 'repoman_plugins', $plugins, HOUR_IN_SECONDS );
         } else {
-            // log error if fetching plugins failed
+            // log error message
             error_log( 'RepoMan Error: ' . $plugins->get_error_message() );
         }
     }
