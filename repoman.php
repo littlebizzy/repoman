@@ -575,7 +575,7 @@ function repoman_extend_search_results( $res, $action, $args ) {
 
     // sanitize the search query
     $search_query = sanitize_text_field( urldecode( $args->search ) );
-    $plugins      = repoman_get_plugins_data_with_cache();
+    $plugins = repoman_get_plugins_data_with_cache();
 
     // return original results if there was an error or no plugins found
     if ( is_wp_error( $plugins ) || empty( $plugins ) ) {
@@ -583,7 +583,7 @@ function repoman_extend_search_results( $res, $action, $args ) {
     }
 
     // normalize plugin data and prepare matching plugins array
-    $plugins          = array_map( 'repoman_normalize_plugin_data', $plugins );
+    $plugins = array_map( 'repoman_normalize_plugin_data', $plugins );
     $matching_plugins = array();
 
     // loop through plugins to calculate match score
@@ -591,7 +591,7 @@ function repoman_extend_search_results( $res, $action, $args ) {
         $score = repoman_calculate_match_score( $plugin, $search_query );
         if ( $score > 0 ) {
             $plugin['match_score'] = $score;
-            $matching_plugins[]    = $plugin;
+            $matching_plugins[] = $plugin;
         }
     }
 
@@ -615,7 +615,7 @@ function repoman_extend_search_results( $res, $action, $args ) {
     } );
 
     // merge formatted plugins with the original ones
-    $res->plugins        = array_merge( $formatted_plugins, $original_plugins );
+    $res->plugins = array_merge( $formatted_plugins, $original_plugins );
     $res->info['results'] = count( $res->plugins );
 
     return $res;
@@ -623,18 +623,6 @@ function repoman_extend_search_results( $res, $action, $args ) {
 add_filter( 'plugins_api_result', 'repoman_extend_search_results', 12, 3 );
 
 // hide active installs and star ratings for repoman results only
-add_action( 'admin_head', function() {
-	echo '<style>
-		.plugin-card[class*="plugin-card-repoman-"] .column-downloaded {
-			visibility: hidden;
-		}
-		.plugin-card[class*="plugin-card-repoman-"] .star-rating,
-		.plugin-card[class*="plugin-card-repoman-"] .num-ratings {
-			visibility: hidden;
-		}
-	</style>';
-} );
-
 add_action( 'admin_head', function() {
     echo '<style>
       /* “:has()” matches any .plugin-card that contains a GitHub avatar */
@@ -645,7 +633,6 @@ add_action( 'admin_head', function() {
       }
     </style>';
 });
-
 
 // Ref: ChatGPT
 // Ref: https://make.wordpress.org/core/2021/06/29/introducing-update-uri-plugin-header-in-wordpress-5-8/
