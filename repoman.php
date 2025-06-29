@@ -239,34 +239,35 @@ add_filter( 'plugins_api', 'repoman_plugins_api_handler', 99, 3 );
 function repoman_prepare_plugin_information( $plugin ) {
     // set the plugin version and sanitize
     $version = isset( $plugin['version'] ) ? sanitize_text_field( $plugin['version'] ) : '1.0.0';
+
     // get the plugin download link
     $download_link = repoman_get_plugin_download_link( $plugin );
 
     // prepare the plugin data array
     $plugin_data = array(
-        'id'                => $plugin['slug'],
-        'type'              => 'plugin',
-        'name'              => sanitize_text_field( $plugin['name'] ),
-        'slug'              => sanitize_title( $plugin['slug'] ),
-        'version'           => $version,
-        'author'            => wp_kses_post( $plugin['author'] ),
-        'author_profile'    => $plugin['author_url'],
-        'requires'          => '5.0',
-        'tested'            => get_bloginfo( 'version' ),
-        'requires_php'      => '7.0',
-        'sections'          => array(
+        'id' => $plugin['slug'],
+        'type' => 'plugin',
+        'name' => sanitize_text_field( $plugin['name'] ),
+        'slug' => sanitize_title( $plugin['slug'] ),
+        'version' => $version,
+        'author' => wp_kses_post( $plugin['author'] ),
+        'author_profile' => $plugin['author_url'],
+        'requires' => '5.0',
+        'tested' => get_bloginfo( 'version' ),
+        'requires_php' => '7.0',
+        'sections' => array(
             'description' => wp_kses_post( $plugin['description'] ),
         ),
-        'download_link'     => $download_link,
-        'package'           => $download_link,
-        'last_updated'      => sanitize_text_field( $plugin['last_updated'] ),
-        'homepage'          => ! empty( $plugin['author_url'] ) ? esc_url( $plugin['author_url'] ) : '',
+        'download_link' => $download_link,
+        'package' => $download_link,
+        'last_updated' => sanitize_text_field( $plugin['last_updated'] ),
+        'homepage' => ! empty( $plugin['author_url'] ) ? esc_url( $plugin['author_url'] ) : '',
         'short_description' => wp_kses_post( $plugin['description'] ),
-        'icons'             => array(
+        'icons' => array(
             'default' => ! empty( $plugin['icon_url'] ) ? esc_url( $plugin['icon_url'] ) : '',
         ),
-        'external'          => false,
-        'plugin'            => $plugin['slug'] . '/' . $plugin['slug'] . '.php',
+        'external' => false,
+        'plugin' => $plugin['slug'] . '/' . $plugin['slug'] . '.php',
     );
 
     // return plugin data as an object
