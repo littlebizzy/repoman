@@ -41,15 +41,12 @@ function scan_plugin_main_file_for_github_uri( $plugin_file ) {
     // check if the plugin file exists and is readable
     if ( file_exists( $plugin_file_path ) && is_readable( $plugin_file_path ) ) {
         $file_content = @file_get_contents( $plugin_file_path );
-        
-        // if the file couldn't be read, log the error and skip
-        if ( false === $file_content ) {
+
+        // check if the file was read successfully
+        if ( $file_content === false ) {
             error_log( "Failed to read plugin file: " . $plugin_file_path . ". This might be due to file permissions or corruption." );
-        } else {
-            // check if the 'GitHub Plugin URI' string exists in the file (case-sensitive)
-            if ( strpos( $file_content, 'GitHub Plugin URI' ) !== false ) {
-                $github_uri_found = true;
-            }
+        } elseif ( strpos( $file_content, 'GitHub Plugin URI' ) !== false ) {
+            $github_uri_found = true;
         }
     } else {
         // log if the plugin file is not accessible
@@ -68,14 +65,11 @@ function scan_plugin_main_file_for_update_uri( $plugin_file ) {
     if ( file_exists( $plugin_file_path ) && is_readable( $plugin_file_path ) ) {
         $file_content = @file_get_contents( $plugin_file_path );
 
-        // if the file couldn't be read, log the error and skip
-        if ( false === $file_content ) {
+        // check if the file was read successfully
+        if ( $file_content === false ) {
             error_log( "Failed to read plugin file: " . $plugin_file_path . ". This might be due to file permissions or corruption." );
-        } else {
-            // check if the 'Update URI' string exists in the file (case-sensitive)
-            if ( strpos( $file_content, 'Update URI' ) !== false ) {
-                $update_uri_found = true;
-            }
+        } elseif ( strpos( $file_content, 'Update URI' ) !== false ) {
+            $update_uri_found = true;
         }
     } else {
         // log if the plugin file is not accessible
