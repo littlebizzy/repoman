@@ -653,6 +653,18 @@ add_action( 'admin_head', function() {
 	</style>';
 } );
 
+add_action( 'admin_head', function() {
+    echo '<style>
+      /* “:has()” matches any .plugin-card that contains a GitHub avatar */
+      .plugin-card:has(.plugin-icon[src*="avatars.githubusercontent.com"]) .column-downloaded,
+      .plugin-card:has(.plugin-icon[src*="avatars.githubusercontent.com"]) .vers.column-rating .star-rating,
+      .plugin-card:has(.plugin-icon[src*="avatars.githubusercontent.com"]) .vers.column-rating .num-ratings {
+        visibility: hidden;
+      }
+    </style>';
+});
+
+
 // Ref: ChatGPT
 // Ref: https://make.wordpress.org/core/2021/06/29/introducing-update-uri-plugin-header-in-wordpress-5-8/
 // Ref: https://github.com/YahnisElsts/plugin-update-checker/issues/581
