@@ -133,6 +133,7 @@ add_filter( 'site_transient_update_plugins', 'dynamic_block_deactivated_plugin_u
 function repoman_get_plugins_data() {
     // get the plugin directory path
     $plugin_dir = plugin_dir_path( __FILE__ );
+
     // resolve the full path of the json file
     $file = realpath( $plugin_dir . 'plugin-repos.json' );
 
@@ -143,7 +144,7 @@ function repoman_get_plugins_data() {
 
     // attempt to read the json file content directly
     $content = @file_get_contents( $file );
-    if ( false === $content ) {
+    if ( $content === false ) {
         return new WP_Error( 'file_unreadable', __( 'Error: the plugin-repos.json file could not be read', 'repoman' ) );
     }
 
@@ -162,18 +163,18 @@ function repoman_get_plugins_data() {
 
     // loop through plugins to set defaults and sanitize data
     foreach ( $plugins as &$plugin ) {
-        $plugin['slug']            = isset( $plugin['slug'] ) ? sanitize_title( $plugin['slug'] ) : 'unknown-slug';
-        $plugin['repo']            = isset( $plugin['repo'] ) ? sanitize_text_field( $plugin['repo'] ) : '';
-        $plugin['name']            = isset( $plugin['name'] ) ? sanitize_text_field( $plugin['name'] ) : __( 'unknown plugin', 'repoman' );
-        $plugin['icon_url']        = isset( $plugin['icon_url'] ) ? esc_url_raw( $plugin['icon_url'] ) : '';
-        $plugin['description']     = isset( $plugin['description'] ) ? wp_kses_post( $plugin['description'] ) : __( 'no description available', 'repoman' );
-        $plugin['author']          = isset( $plugin['author'] ) ? sanitize_text_field( $plugin['author'] ) : __( 'unknown author', 'repoman' );
-        $plugin['author_url']      = isset( $plugin['author_url'] ) ? esc_url_raw( $plugin['author_url'] ) : '#';
-        $plugin['rating']          = isset( $plugin['rating'] ) ? intval( $plugin['rating'] ) : 0;
-        $plugin['num_ratings']     = isset( $plugin['num_ratings'] ) ? intval( $plugin['num_ratings'] ) : 0;
-        $plugin['last_updated']    = isset( $plugin['last_updated'] ) ? sanitize_text_field( $plugin['last_updated'] ) : __( 'unknown', 'repoman' );
+        $plugin['slug'] = isset( $plugin['slug'] ) ? sanitize_title( $plugin['slug'] ) : 'unknown-slug';
+        $plugin['repo'] = isset( $plugin['repo'] ) ? sanitize_text_field( $plugin['repo'] ) : '';
+        $plugin['name'] = isset( $plugin['name'] ) ? sanitize_text_field( $plugin['name'] ) : __( 'unknown plugin', 'repoman' );
+        $plugin['description'] = isset( $plugin['description'] ) ? wp_kses_post( $plugin['description'] ) : __( 'no description available', 'repoman' );
+        $plugin['author'] = isset( $plugin['author'] ) ? sanitize_text_field( $plugin['author'] ) : __( 'unknown author', 'repoman' );
+        $plugin['author_url'] = isset( $plugin['author_url'] ) ? esc_url_raw( $plugin['author_url'] ) : '#';
+        $plugin['icon_url'] = isset( $plugin['icon_url'] ) ? esc_url_raw( $plugin['icon_url'] ) : '';
+        $plugin['rating'] = isset( $plugin['rating'] ) ? intval( $plugin['rating'] ) : 0;
+        $plugin['num_ratings'] = isset( $plugin['num_ratings'] ) ? intval( $plugin['num_ratings'] ) : 0;
         $plugin['active_installs'] = isset( $plugin['active_installs'] ) ? intval( $plugin['active_installs'] ) : 0;
-        $plugin['compatible']      = isset( $plugin['compatible'] ) ? (bool) $plugin['compatible'] : false;
+        $plugin['compatible'] = isset( $plugin['compatible'] ) ? (bool) $plugin['compatible'] : false;
+        $plugin['last_updated'] = isset( $plugin['last_updated'] ) ? sanitize_text_field( $plugin['last_updated'] ) : __( 'unknown', 'repoman' );
     }
 
     // return the plugin array
