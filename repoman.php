@@ -265,7 +265,6 @@ function repoman_prepare_plugin_information( $plugin ) {
         'last_updated'      => sanitize_text_field( $plugin['last_updated'] ),
         'homepage'          => ! empty( $plugin['author_url'] ) ? esc_url( $plugin['author_url'] ) : '',
         'short_description' => wp_kses_post( $plugin['description'] ),
-		'active_installs'   => 0,
         'icons'             => array(
             'default' => ! empty( $plugin['icon_url'] ) ? esc_url( $plugin['icon_url'] ) : '',
         ),
@@ -495,10 +494,6 @@ function repoman_calculate_match_score( $plugin, $search_query ) {
 function repoman_prepare_plugin_for_display( $plugin ) {
     // normalize the plugin data
     $plugin = repoman_normalize_plugin_data( $plugin );
-
-    // remove active_installs to hide 0+
-    // unset( $plugin['active_installs'] );
-
     // get the download link for the plugin
     $download_link = repoman_get_plugin_download_link( $plugin );
 
@@ -507,14 +502,11 @@ function repoman_prepare_plugin_for_display( $plugin ) {
         'id'                            => $plugin['slug'],
         'type'                          => 'plugin',
         'name'                          => sanitize_text_field( $plugin['name'] ),
-        // 'slug' => sanitize_title( $plugin['slug'] ),
-		'slug' => 'repoman-' . sanitize_title( $plugin['slug'] ),
+		'slug'                          => sanitize_title( $plugin['slug'] ),
         'version'                       => sanitize_text_field( $plugin['version'] ),
-        // 'author'                        => sanitize_text_field( $plugin['author'] ),
-        'author' => ! empty( $plugin['repo'] )
-            ? '<a href="https://github.com/' . esc_attr( $plugin['repo'] ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $plugin['author'] ) . '</a>'
-            : sanitize_text_field( $plugin['author'] ),
-        'author_profile'                => ! empty( $plugin['author_url'] ) ? esc_url( $plugin['author_url'] ) : '',
+        'author'                        => sanitize_text_field( $plugin['author'] ),
+        // 'author_profile'                => ! empty( $plugin['author_url'] ) ? esc_url( $plugin['author_url'] ) : '',
+		'author_profile' => esc_url( ! empty( $plugin['repo'] ) ? 'https://github.com/' . $plugin['repo'] : ( ! empty( $plugin['author_url'] ) ? $plugin['author_url'] : '' ) ),
         'contributors'                  => array(),
         'requires'                      => '',
         'tested'                        => '',
@@ -523,8 +515,7 @@ function repoman_prepare_plugin_for_display( $plugin ) {
         'num_ratings'                   => intval( $plugin['num_ratings'] ),
         'support_threads'               => 0,
         'support_threads_resolved'      => 0,
-        // 'active_installs'               => intval( $plugin['active_installs'] ),
-		'active_installs'               => 0,
+        'active_installs'               => intval( $plugin['active_installs'] ),
         'short_description'             => wp_kses_post( $plugin['description'] ),
         'sections'                      => array(
             'description' => wp_kses_post( $plugin['description'] ),
