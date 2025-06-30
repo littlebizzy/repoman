@@ -429,7 +429,7 @@ function repoman_calculate_match_score( $plugin, $search_query ) {
     $search_query = strtolower( $search_query );
     $search_terms = array_filter( explode( ' ', $search_query ) );
 
-    // exact match of plugin name
+    // exact match on plugin name
     if ( $plugin_name === $search_query ) {
         $score += 100;
     }
@@ -439,7 +439,7 @@ function repoman_calculate_match_score( $plugin, $search_query ) {
         $score += 50;
     }
 
-    // exact match of plugin slug
+    // exact match on plugin slug
     if ( $plugin_slug === sanitize_title( $search_query ) ) {
         $score += 80;
     }
@@ -474,15 +474,15 @@ function repoman_calculate_match_score( $plugin, $search_query ) {
     return $score;
 }
 
-// prepare plugin tiles for display
+// prepare plugin data for display in plugin tiles
 function repoman_prepare_plugin_for_display( $plugin ) {
-    // normalize the plugin data
+    // normalize plugin data
     $plugin = repoman_normalize_plugin_data( $plugin );
 
-    // get the download link for the plugin
+    // get the download link
     $download_link = repoman_get_plugin_download_link( $plugin );
 
-    // return an array with plugin information
+    // return array with plugin information
     return array(
         'id' => $plugin['slug'],
         'type' => 'plugin',
@@ -523,33 +523,31 @@ function repoman_prepare_plugin_for_display( $plugin ) {
     );
 }
 
-// handle the renaming of the plugin folder after installation
+// handle renaming of plugin folder after installation
 function repoman_rename_plugin_folder( $response, $hook_extra, $result ) {
-    // only proceed if installing a plugin
-    if ( isset( $hook_extra['type'] ) && 'plugin' === $hook_extra['type'] ) {
+    // only run for plugin installs
+    if ( isset( $hook_extra['type'] ) && $hook_extra['type'] === 'plugin' ) {
 
-        // retrieve the desired slug from transient
+        // get plugin slug from transient
         $plugin_slug = get_transient( 'repoman_installing_plugin' );
 
         if ( ! $plugin_slug ) {
             return $response;
         }
 
-        // extract the destination from the result array
+        // get destination path from result
         if ( is_array( $result ) && isset( $result['destination'] ) ) {
             $plugin_path = $result['destination'];
         } else {
-            error_log( 'RepoMan Error: invalid result format for plugin installation' );
+            error_log( 'RepoMan Error: Invalid result format for plugin installation' );
             return $response;
         }
 
-        // define the new plugin folder path
+        // build new path using plugin slug
         $new_plugin_path = trailingslashit( dirname( $plugin_path ) ) . $plugin_slug;
 
-        // check if folder name already matches
+        // rename only if paths do not match
         if ( basename( $plugin_path ) !== $plugin_slug ) {
-
-            // attempt to rename folder
             if ( rename( $plugin_path, $new_plugin_path ) ) {
                 error_log( 'Renamed plugin folder from ' . $plugin_path . ' to ' . $new_plugin_path );
                 $response = $new_plugin_path;
@@ -560,7 +558,7 @@ function repoman_rename_plugin_folder( $response, $hook_extra, $result ) {
         }
     }
 
-    // delete transient since it's no longer needed
+    // clear transient after install
     delete_transient( 'repoman_installing_plugin' );
 
     return $response;
@@ -623,10 +621,10 @@ function repoman_extend_search_results( $res, $action, $args ) {
 }
 add_filter( 'plugins_api_result', 'repoman_extend_search_results', 12, 3 );
 
-// hide active installs and star ratings for repoman results only
+// hide active installs and ratings for repoman plugin cards only
 add_action( 'admin_head', function() {
     echo '<style>
-      /* “:has()” matches any .plugin-card that contains a GitHub avatar */
+      /* target plugin cards with github avatar icons */
       .plugin-card:has(.plugin-icon[src*="avatars.githubusercontent.com"]) .column-downloaded,
       .plugin-card:has(.plugin-icon[src*="avatars.githubusercontent.com"]) .vers.column-rating .star-rating,
       .plugin-card:has(.plugin-icon[src*="avatars.githubusercontent.com"]) .vers.column-rating .num-ratings {
