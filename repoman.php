@@ -211,6 +211,11 @@ function repoman_plugins_api_handler( $result, $action, $args ) {
         return $result;
     }
 
+    // ensure args is an object and has a slug
+    if ( ! is_object( $args ) || ! isset( $args->slug ) ) {
+        return $result;
+    }
+
     // fetch plugin data from cache
     $plugins = repoman_get_plugins_data_with_cache();
 
