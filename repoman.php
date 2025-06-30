@@ -56,27 +56,27 @@ function scan_plugin_main_file_for_github_uri( $plugin_file ) {
     return strpos( $file_content, 'GitHub Plugin URI' ) !== false;
 }
 
-// scan the main plugin file for the 'Update URI' string
+// scan main plugin file for 'Update URI' string
 function scan_plugin_main_file_for_update_uri( $plugin_file ) {
-    $update_uri_found = false;
     $plugin_file_path = WP_PLUGIN_DIR . '/' . $plugin_file;
 
-    // check if the plugin file exists and is readable
-    if ( file_exists( $plugin_file_path ) && is_readable( $plugin_file_path ) ) {
-        $file_content = @file_get_contents( $plugin_file_path );
-
-        // check if the file was read successfully
-        if ( $file_content === false ) {
-            error_log( "Failed to read plugin file: " . $plugin_file_path . ". This might be due to file permissions or corruption." );
-        } elseif ( strpos( $file_content, 'Update URI' ) !== false ) {
-            $update_uri_found = true;
-        }
-    } else {
-        // log if the plugin file is not accessible
-        error_log( "Plugin file does not exist or is not readable: " . $plugin_file_path );
+    // check if file exists and is readable
+    if ( ! file_exists( $plugin_file_path ) || ! is_readable( $plugin_file_path ) ) {
+        error_log( 'Plugin file does not exist or is not readable: ' . $plugin_file_path );
+        return false;
     }
 
-    return $update_uri_found;
+    // read file contents
+    $file_content = @file_get_contents( $plugin_file_path );
+
+    // check if reading failed
+    if ( $file_content === false ) {
+        error_log( 'Failed to read plugin file: ' . $plugin_file_path );
+        return false;
+    }
+
+    // look for expected header in file contents
+    return strpos( $file_content, 'Update URI' ) !== false;
 }
 
 // array of specific plugin slugs to block updates
