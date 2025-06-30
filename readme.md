@@ -4,6 +4,13 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.8.7
+- fixed plugin install error caused by slug-related changes in 1.8.6
+- reverted `repoman-` slug prefix which caused problems
+- now hiding star ratings and active installs using modern `:has` CSS selectors
+- linking author names to GitHub repos using a cleaner method
+- general code cleanup and formatting improvements
+
 ### 1.8.6
 - prefixed plugin slugs with `repoman-` to enable targeted CSS
 - hid star ratings and active install counts only for RepoMan results
