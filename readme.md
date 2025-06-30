@@ -5,20 +5,21 @@ Install public repos to WordPress
 ## Changelog
 
 ### 1.8.7
-- fixed plugin install error caused by slug-related changes in 1.8.6
-- reverted `repoman-` slug prefix which caused problems
-- now hiding star ratings and active installs using modern `:has` CSS selectors
-- linking author names to GitHub repos using a cleaner method
-- general code cleanup and formatting improvements
+- removed the `repoman-` slug prefix which caused installation errors
+- now hiding star ratings and active installs using modern `:has` CSS pseudo-class
+- now linking author names to author homepage with fallback to GitHub repos
+- uncommented and sanitized `active_installs` lines after confirming no conflicts
+- `scan_plugin_main_file_for_` now returns immediately if the file is missing or unreadable
+- various minor code optimization formatting improvements
 
 ### 1.8.6
 - prefixed plugin slugs with `repoman-` to enable targeted CSS
-- hid star ratings and active install counts only for RepoMan results
+- scoped CSS better to hide star ratings and active install counts on RepoMan tiles only
 
 ### 1.8.5
-- removed `active_installs` from plugin data and display
-- added CSS to hide install count div in search result tiles
-- linked author names to GitHub repos instead of plain text
+- experimented with commenting some `active_installs` lines in plugin data
+- added basic CSS to hide the install count `.column-downloaded` in plugin tiles
+- linked author names to GitHub repos in `repoman_prepare_plugin_for_display()`
 
 ### 1.8.4
 - added `littlebizzy/contact-form`
