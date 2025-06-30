@@ -276,40 +276,40 @@ function repoman_prepare_plugin_information( $plugin ) {
     return (object) $plugin_data;
 }
 
-// get the download link for the plugin from github with automatic branch detection
+// get download link for plugin using github with automatic branch detection
 function repoman_get_plugin_download_link( $plugin ) {
 
-    // check if the repo field is empty
+    // check if repo field is empty
     if ( empty( $plugin['repo'] ) ) {
-        error_log( 'RepoMan Error: Repository owner/repo is empty for plugin ' . $plugin['slug'] );
+        error_log( 'RepoMan Error: Repository owner or repo is empty for plugin ' . $plugin['slug'] );
         return '';
     }
 
-    // split the owner and repo from the repo field
+    // extract owner and repo from repo string
     $parts = explode( '/', $plugin['repo'] );
     if ( count( $parts ) < 2 ) {
-        error_log( 'RepoMan Error: Invalid repository owner/repo format for plugin ' . $plugin['slug'] );
+        error_log( 'RepoMan Error: Invalid repository format for plugin ' . $plugin['slug'] );
         return '';
     }
 
     $owner = $parts[0];
-    $repo  = $parts[1];
+    $repo = $parts[1];
 
-    // check if the default branch is already cached
+    // check for cached default branch
     $cache_key = 'repoman_default_branch_' . $owner . '_' . $repo;
     $default_branch = get_transient( $cache_key );
 
-    // if not cached, retrieve the default branch via github api
-    if ( false === $default_branch ) {
+    // fetch default branch if not cached
+    if ( $default_branch === false ) {
         $api_url = "https://api.github.com/repos/{$owner}/{$repo}";
         $response = wp_remote_get( $api_url, array(
             'headers' => array( 'user-agent' => 'RepoMan' ),
             'timeout' => 30,
         ) );
 
-        // handle connection errors
+        // handle api error
         if ( is_wp_error( $response ) ) {
-            error_log( 'RepoMan Error: Unable to connect to GitHub API for plugin ' . $plugin['slug'] . '. Error: ' . $response->get_error_message() );
+            error_log( 'RepoMan Error: Unable to connect to github api for plugin ' . $plugin['slug'] . '. error: ' . $response->get_error_message() );
             $default_branch = 'master';
         } else {
             $body = wp_remote_retrieve_body( $response );
@@ -318,79 +318,78 @@ function repoman_get_plugin_download_link( $plugin ) {
             if ( json_last_error() === JSON_ERROR_NONE && isset( $data['default_branch'] ) ) {
                 $default_branch = sanitize_text_field( $data['default_branch'] );
             } else {
-                error_log( 'RepoMan Error: Unable to retrieve default branch for plugin ' . $plugin['slug'] . '. JSON error: ' . json_last_error_msg() );
+                error_log( 'RepoMan Error: Unable to detect default branch for plugin ' . $plugin['slug'] . '. json error: ' . json_last_error_msg() );
                 $default_branch = 'master';
             }
         }
 
-        // cache the default branch for 12 hours
+        // cache the result for 12 hours
         set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
     }
 
-    // construct the download link using the default branch
+    // build initial download link
     $download_link = "https://github.com/{$owner}/{$repo}/archive/refs/heads/{$default_branch}.zip";
 
-    // fetch the actual content to verify link existence
+    // test download link
     $get_response = wp_remote_get( $download_link, array(
         'headers' => array( 'user-agent' => 'RepoMan' ),
         'timeout' => 30,
     ) );
 
-    // handle errors for invalid zip file
+    // handle error or fallback if zip not accessible
     if ( is_wp_error( $get_response ) || wp_remote_retrieve_response_code( $get_response ) !== 200 ) {
         $error_message = is_wp_error( $get_response ) ? $get_response->get_error_message() : wp_remote_retrieve_response_message( $get_response );
-        error_log( "RepoMan Error: Unable to access zip file at {$download_link} for plugin {$plugin['slug']}. Response: " . print_r( $error_message, true ) );
+        error_log( 'RepoMan Error: unable to access zip file at ' . $download_link . ' for plugin ' . $plugin['slug'] . '. response: ' . print_r( $error_message, true ) );
 
-        // attempt fallback to 'master' if default branch is not already 'master'
-        if ( 'master' !== $default_branch ) {
+        // fallback to master if not already used
+        if ( $default_branch !== 'master' ) {
             $fallback_branch = 'master';
             $fallback_download_link = "https://github.com/{$owner}/{$repo}/archive/refs/heads/{$fallback_branch}.zip";
 
-            $fallback_get_response = wp_remote_get( $fallback_download_link, array(
+            $fallback_response = wp_remote_get( $fallback_download_link, array(
                 'headers' => array( 'user-agent' => 'RepoMan' ),
                 'timeout' => 30,
             ) );
 
-            if ( ! is_wp_error( $fallback_get_response ) && wp_remote_retrieve_response_code( $fallback_get_response ) === 200 ) {
+            if ( ! is_wp_error( $fallback_response ) && wp_remote_retrieve_response_code( $fallback_response ) === 200 ) {
                 $download_link = $fallback_download_link;
                 $default_branch = $fallback_branch;
                 set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
             } else {
-                // final fallback to 'main'
+                // fallback to main
                 $fallback_branch = 'main';
                 $fallback_download_link = "https://github.com/{$owner}/{$repo}/archive/refs/heads/{$fallback_branch}.zip";
 
-                $fallback_get_response_main = wp_remote_get( $fallback_download_link, array(
+                $main_response = wp_remote_get( $fallback_download_link, array(
                     'headers' => array( 'user-agent' => 'RepoMan' ),
                     'timeout' => 30,
                 ) );
 
-                if ( ! is_wp_error( $fallback_get_response_main ) && wp_remote_retrieve_response_code( $fallback_get_response_main ) === 200 ) {
+                if ( ! is_wp_error( $main_response ) && wp_remote_retrieve_response_code( $main_response ) === 200 ) {
                     $download_link = $fallback_download_link;
                     $default_branch = $fallback_branch;
                     set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
                 } else {
-                    error_log( "RepoMan Error: Unable to access zip file at {$fallback_download_link} for plugin {$plugin['slug']}." );
+                    error_log( 'RepoMan Error: Unable to access zip file at ' . $fallback_download_link . ' for plugin ' . $plugin['slug'] );
                     return '';
                 }
             }
-			
         } else {
-            // fallback to 'main' if current default was 'master'
+            // fallback to main if master failed
             $fallback_branch = 'main';
             $fallback_download_link = "https://github.com/{$owner}/{$repo}/archive/refs/heads/{$fallback_branch}.zip";
 
-            $fallback_get_response_main = wp_remote_get( $fallback_download_link, array(
+            $main_response = wp_remote_get( $fallback_download_link, array(
                 'headers' => array( 'user-agent' => 'RepoMan' ),
                 'timeout' => 30,
             ) );
 
-            if ( ! is_wp_error( $fallback_get_response_main ) && wp_remote_retrieve_response_code( $fallback_get_response_main ) === 200 ) {
+            if ( ! is_wp_error( $main_response ) && wp_remote_retrieve_response_code( $main_response ) === 200 ) {
                 $download_link = $fallback_download_link;
                 $default_branch = $fallback_branch;
                 set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
             } else {
-                error_log( "RepoMan Error: Unable to access zip file at {$fallback_download_link} for plugin {$plugin['slug']}." );
+                error_log( 'RepoMan Error: Unable to access zip file at ' . $fallback_download_link . ' for plugin ' . $plugin['slug'] );
                 return '';
             }
         }
