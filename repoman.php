@@ -257,20 +257,8 @@ function repoman_prepare_plugin_information( $plugin ) {
         'name' => sanitize_text_field( $plugin['name'] ),
         'slug' => sanitize_title( $plugin['slug'] ),
         'version' => $version,
-        // 'author' => wp_kses_post( $plugin['author'] ),
-        'author' => ! empty( $plugin['author_url'] )
-            ? sprintf( '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
-                esc_url( $plugin['author_url'] ),
-                esc_html( $plugin['author'] )
-            )
-            : ( ! empty( $plugin['repo'] )
-                ? sprintf( '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
-                    esc_url( 'https://github.com/' . $plugin['repo'] ),
-                    esc_html( $plugin['author'] )
-                )
-            : esc_html( $plugin['author'] )
-        ),
-        'author_profile' => $plugin['author_url'],
+        'author' => esc_html( $plugin['author'] ),
+        'author_profile' => esc_url( $plugin['author_url'] ),
         'requires' => '5.0',
         'tested' => get_bloginfo( 'version' ),
         'requires_php' => '7.0',
@@ -506,13 +494,18 @@ function repoman_prepare_plugin_for_display( $plugin ) {
         'name' => sanitize_text_field( $plugin['name'] ),
         'slug' => sanitize_title( $plugin['slug'] ),
         'version' => sanitize_text_field( $plugin['version'] ),
-        'author' => sanitize_text_field( $plugin['author'] ),
+        'author' => ! empty( $plugin['author_url'] )
+            ? '<a href="' . esc_url( $plugin['author_url'] ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $plugin['author'] ) . '</a>'
+            : ( ! empty( $plugin['repo'] )
+                ? '<a href="' . esc_url( 'https://github.com/' . $plugin['repo'] ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $plugin['author'] ) . '</a>'
+                : esc_html( $plugin['author'] )
+            ),
         'author_profile' => ! empty( $plugin['author_url'] ) ? esc_url( $plugin['author_url'] ) : '',
         'contributors' => array(),
         'requires' => '',
         'tested' => '',
         'requires_php' => '',
-        'rating' => intval( $plugin['rating'] ) * 20, // convert rating to a percentage
+        'rating' => intval( $plugin['rating'] ) * 20,
         'num_ratings' => intval( $plugin['num_ratings'] ),
         'support_threads' => 0,
         'support_threads_resolved' => 0,
