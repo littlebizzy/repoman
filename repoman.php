@@ -90,9 +90,9 @@ function get_blocked_plugin_slugs() {
     );
 }
 
-// disable updates for plugins with 'GitHub Plugin URI', 'Update URI', and specified slugs
+// disable WordPress.org for plugins with 'GitHub Plugin URI', 'Update URI', and specified slugs
 function dynamic_block_plugin_updates( $overrides ) {
-    // get all installed plugins (active and inactive)
+    // get all installed plugins
     $all_plugins = get_plugins();
 
     // get array of blocked slugs
@@ -100,10 +100,10 @@ function dynamic_block_plugin_updates( $overrides ) {
 
     // loop through each plugin
     foreach ( $all_plugins as $plugin_file => $plugin_data ) {
-        // get the plugin slug from its path
+        // get plugin slug from its path
         $slug = dirname( $plugin_file );
 
-        // block if 'GitHub Plugin URI' or 'Update URI' string exists or if slug is in the blocked array
+        // check if file has relevant header or matches a blocked slug
         if ( scan_plugin_main_file_for_github_uri( $plugin_file ) || scan_plugin_main_file_for_update_uri( $plugin_file ) || in_array( $slug, $blocked_slugs, true ) ) {
             $overrides[] = $plugin_file;
         }
@@ -113,12 +113,12 @@ function dynamic_block_plugin_updates( $overrides ) {
 }
 add_filter( 'gu_override_dot_org', 'dynamic_block_plugin_updates', 999 );
 
-// ensure this applies even if plugins are deactivated
+// apply blocklist even if plugins are deactivated
 function dynamic_block_deactivated_plugin_updates( $transient ) {
-    // get override list via filter
+    // get override list from filter
     $overrides = apply_filters( 'gu_override_dot_org', [] );
 
-    // loop through plugins and remove if in overrides
+    // remove matching plugins from update response
     foreach ( $overrides as $plugin ) {
         if ( isset( $transient->response[ $plugin ] ) ) {
             unset( $transient->response[ $plugin ] );
@@ -129,39 +129,41 @@ function dynamic_block_deactivated_plugin_updates( $transient ) {
 }
 add_filter( 'site_transient_update_plugins', 'dynamic_block_deactivated_plugin_updates' );
 
-// fetch plugin data from json file with secure handling and fallback for missing keys
+// fetch plugin data from json file with safe handling and fallback values
 function repoman_get_plugins_data() {
-    // get the plugin directory path
+    // get plugin directory path
     $plugin_dir = plugin_dir_path( __FILE__ );
 
-    // resolve the full path of the json file
+    // get resolved path of the json file
     $file = realpath( $plugin_dir . 'plugin-repos.json' );
 
-    // check if the file exists and is within the plugin directory
+    // check if file exists and is inside the plugin directory
     if ( ! $file || strpos( $file, realpath( $plugin_dir ) ) !== 0 ) {
         return new WP_Error( 'file_missing', __( 'Error: the plugin-repos.json file is missing or outside the plugin directory', 'repoman' ) );
     }
 
-    // attempt to read the json file content directly
+    // try reading json file contents
     $content = @file_get_contents( $file );
+
+    // check if json reading failed
     if ( $content === false ) {
         return new WP_Error( 'file_unreadable', __( 'Error: the plugin-repos.json file could not be read', 'repoman' ) );
     }
 
-    // decode the json content
+    // decode json contents
     $plugins = json_decode( $content, true );
 
-    // check for json decoding errors
+    // check for json decode errors
     if ( json_last_error() !== JSON_ERROR_NONE ) {
         return new WP_Error( 'file_malformed', sprintf( __( 'Error: the plugin-repos.json file is malformed (%s)', 'repoman' ), json_last_error_msg() ) );
     }
 
-    // check if the decoded content is empty
+    // check if decoded array is empty
     if ( empty( $plugins ) ) {
         return new WP_Error( 'file_empty', __( 'Error: the plugin-repos.json file is empty or contains no plugins', 'repoman' ) );
     }
 
-    // loop through plugins to set defaults and sanitize data
+    // sanitize and fill missing fields
     foreach ( $plugins as &$plugin ) {
         $plugin['slug'] = isset( $plugin['slug'] ) ? sanitize_title( $plugin['slug'] ) : 'unknown-slug';
         $plugin['repo'] = isset( $plugin['repo'] ) ? sanitize_text_field( $plugin['repo'] ) : '';
@@ -181,7 +183,7 @@ function repoman_get_plugins_data() {
     return $plugins;
 }
 
-// fetch plugin data with caching via transients
+// fetch plugin data with caching using transients
 function repoman_get_plugins_data_with_cache() {
     // get cached plugin data
     $plugins = get_transient( 'repoman_plugins' );
@@ -202,48 +204,48 @@ function repoman_get_plugins_data_with_cache() {
     return $plugins;
 }
 
-// handle the plugin information display
+// handle plugin information requests
 function repoman_plugins_api_handler( $result, $action, $args ) {
     // check if action is for plugin information
-    if ( 'plugin_information' !== $action ) {
+    if ( $action !== 'plugin_information' ) {
         return $result;
     }
 
-    // fetch plugin data with cache
+    // fetch plugin data from cache
     $plugins = repoman_get_plugins_data_with_cache();
 
-    // return original result if there are errors or no plugins
+    // return original result if data is missing or invalid
     if ( is_wp_error( $plugins ) || empty( $plugins ) ) {
         return $result;
     }
 
-    // loop through plugins to find the matching slug
+    // look for matching plugin slug
     foreach ( $plugins as $plugin ) {
         if ( $plugin['slug'] === $args->slug ) {
-            // prepare plugin information
+            // prepare plugin response
             $plugin_info = repoman_prepare_plugin_information( $plugin );
 
-            // store the plugin slug in a transient
+            // cache slug temporarily
             set_transient( 'repoman_installing_plugin', $plugin['slug'], 15 * MINUTE_IN_SECONDS );
 
             return (object) $plugin_info;
         }
     }
 
-    // return original result if no match is found
+    // return original result if no match found
     return $result;
 }
 add_filter( 'plugins_api', 'repoman_plugins_api_handler', 99, 3 );
 
-// prepare plugin information for the plugin installer
+// prepare plugin information for installer response
 function repoman_prepare_plugin_information( $plugin ) {
-    // set the plugin version and sanitize
+    // get plugin version or fallback
     $version = isset( $plugin['version'] ) ? sanitize_text_field( $plugin['version'] ) : '1.0.0';
 
-    // get the plugin download link
+    // get plugin download link
     $download_link = repoman_get_plugin_download_link( $plugin );
 
-    // prepare the plugin data array
+    // build plugin data array
     $plugin_data = array(
         'id' => $plugin['slug'],
         'type' => 'plugin',
@@ -270,7 +272,7 @@ function repoman_prepare_plugin_information( $plugin ) {
         'plugin' => $plugin['slug'] . '/' . $plugin['slug'] . '.php',
     );
 
-    // return plugin data as an object
+    // return plugin data as object
     return (object) $plugin_data;
 }
 
