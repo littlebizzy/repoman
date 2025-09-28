@@ -4,6 +4,11 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.8.8
+- tested up to WordPress 6.8
+- removed `load_textdomain` block (we are not bundling translation files for now)
+- added `littlebizzy/secure-file-access`
+
 ### 1.8.7
 - removed the `repoman-` slug prefix which caused installation errors
 - now hiding star ratings and active installs using modern `:has` CSS pseudo-class
