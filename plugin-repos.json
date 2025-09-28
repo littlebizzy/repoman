@@ -416,6 +416,19 @@
     "compatible": true
   },
   {
+  "slug": "secure-file-access",
+  "name": "Secure File Access",
+  "description": "Easy file downloads for WordPress",
+  "author": "LittleBizzy",
+  "author_url": "https://www.littlebizzy.com",
+  "repo": "littlebizzy/secure-file-access",
+  "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+  "rating": 0,
+  "ratings_count": 0,
+  "last_updated": "2025-09-28",
+  "compatible": true
+  },
+  {
     "slug": "statcounter",
     "name": "StatCounter",
     "description": "Optimized StatCounter tracking",
