@@ -3,9 +3,9 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 1.8.7
+Version: 1.8.8
 Requires PHP: 7.0
-Tested up to: 6.7
+Tested up to: 6.8
 Author: LittleBizzy
 Author URI: https://www.littlebizzy.com
 License: GPLv3
@@ -26,12 +26,6 @@ add_filter( 'gu_override_dot_org', function( $overrides ) {
     $overrides[] = 'repoman/repoman.php';
     return $overrides;
 }, 999 );
-
-// load plugin textdomain for translations
-function repoman_load_textdomain() {
-    load_plugin_textdomain( 'repoman', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-}
-add_action( 'plugins_loaded', 'repoman_load_textdomain' );
 
 // scan main plugin file for 'GitHub Plugin URI' string
 function scan_plugin_main_file_for_github_uri( $plugin_file ) {
