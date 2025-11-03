@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.8.9
+- added `littlebizzy/anti-spam`
+
 ### 1.8.8
 - tested up to WordPress 6.8
 - removed `load_textdomain` block (we are not bundling translation files for now)
