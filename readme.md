@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 1.9.0
+- added `littlebizzy/export-database`
+
 ### 1.8.9
 - added `littlebizzy/anti-spam`
 
