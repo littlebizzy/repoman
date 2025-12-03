@@ -260,6 +260,19 @@
     "compatible": true
   },
   {
+    "slug": "export-database",
+    "name": "Export Database",
+    "description": "Backup your WordPress website",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/export-database",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "force-https",
     "name": "Force HTTPS",
     "description": "HTTPS enforcement for WordPress",
