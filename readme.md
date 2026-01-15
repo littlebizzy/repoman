@@ -4,6 +4,11 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 2.0.0
+- added support for overriding the bundled plugin index using the `REPOMAN_PLUGIN_INDEX_PATH` PHP constant
+- allows hosts and agencies to supply a custom `plugin-repos.json` file without forking RepoMan
+- default bundled index remains unchanged and is used automatically when no override is defined
+
 ### 1.9.0
 - added `littlebizzy/export-database`
 
