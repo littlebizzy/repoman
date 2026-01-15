@@ -3,9 +3,9 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 1.9.0
+Version: 2.0.0
 Requires PHP: 7.0
-Tested up to: 6.8
+Tested up to: 6.9
 Author: LittleBizzy
 Author URI: https://www.littlebizzy.com
 License: GPLv3
@@ -123,17 +123,25 @@ function dynamic_block_deactivated_plugin_updates( $transient ) {
 }
 add_filter( 'site_transient_update_plugins', 'dynamic_block_deactivated_plugin_updates' );
 
+// get plugin index path
+function repoman_get_plugin_index_path() {
+    $default_path = plugin_dir_path( __FILE__ ) . 'plugin-repos.json';
+
+    if ( defined( 'REPOMAN_PLUGIN_INDEX_PATH' ) && is_readable( REPOMAN_PLUGIN_INDEX_PATH ) ) {
+        return realpath( REPOMAN_PLUGIN_INDEX_PATH );
+    }
+
+    return realpath( $default_path );
+}
+
 // fetch plugin data from json file with safe handling and fallback values
 function repoman_get_plugins_data() {
-    // get plugin directory path
-    $plugin_dir = plugin_dir_path( __FILE__ );
-
     // get resolved path of the json file
-    $file = realpath( $plugin_dir . 'plugin-repos.json' );
+    $file = repoman_get_plugin_index_path();
 
-    // check if file exists and is inside the plugin directory
-    if ( ! $file || strpos( $file, realpath( $plugin_dir ) ) !== 0 ) {
-        return new WP_Error( 'file_missing', __( 'Error: the plugin-repos.json file is missing or outside the plugin directory', 'repoman' ) );
+    // check if file exists and is readable
+    if ( ! $file || ! file_exists( $file ) || ! is_readable( $file ) ) {
+        return new WP_Error( 'file_missing', __( 'Error: the plugin-repos.json file is missing or unreadable', 'repoman' ) );
     }
 
     // try reading json file contents
