@@ -468,6 +468,19 @@
     "compatible": true
   },
   {
+    "slug": "verified-customers",
+    "name": "Verified Customers",
+    "description": "Verified emails for WooCommerce",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/verified-customers",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "woo-product-table",
     "name": "Woo Product Table",
     "description": "WooCommerce product table plugin helps you to display your products in a searchable table layout with filters. Boost conversions & sales. Woo Product Table is best for Wholesale.",
