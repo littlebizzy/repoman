@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 2.0.1
+- added `littlebizzy/verified-customers`
+
 ### 2.0.0
 - added support for overriding the bundled plugin index using the `REPOMAN_PLUGIN_INDEX_PATH` PHP constant
 - allows hosts and agencies to supply a custom `plugin-repos.json` file without forking RepoMan
