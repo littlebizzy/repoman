@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 2.1.1
+Version: 2.1.2
 Requires PHP: 7.0
 Tested up to: 6.9
 Author: LittleBizzy
@@ -366,6 +366,7 @@ function repoman_get_plugin_download_link( $plugin ) {
     $get_response = wp_remote_get( $download_link, array(
         'headers' => array( 'user-agent' => 'RepoMan' ),
         'timeout' => 30,
+        'limit_response_size' => 1,
     ) );
 
     // handle error or fallback if zip not accessible
@@ -381,6 +382,7 @@ function repoman_get_plugin_download_link( $plugin ) {
             $fallback_response = wp_remote_get( $fallback_download_link, array(
                 'headers' => array( 'user-agent' => 'RepoMan' ),
                 'timeout' => 30,
+                'limit_response_size' => 1,
             ) );
 
             if ( repoman_is_successful_http_response( $fallback_response ) ) {
@@ -395,6 +397,7 @@ function repoman_get_plugin_download_link( $plugin ) {
                 $main_response = wp_remote_get( $fallback_download_link, array(
                     'headers' => array( 'user-agent' => 'RepoMan' ),
                     'timeout' => 30,
+                    'limit_response_size' => 1,
                 ) );
 
                 if ( repoman_is_successful_http_response( $main_response ) ) {
@@ -414,6 +417,7 @@ function repoman_get_plugin_download_link( $plugin ) {
             $main_response = wp_remote_get( $fallback_download_link, array(
                 'headers' => array( 'user-agent' => 'RepoMan' ),
                 'timeout' => 30,
+                'limit_response_size' => 1,
             ) );
 
             if ( repoman_is_successful_http_response( $main_response ) ) {
