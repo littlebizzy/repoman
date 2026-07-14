@@ -26,17 +26,17 @@
     "compatible": true
   },
   {
-  "slug": "anti-spam",
-  "name": "Anti-Spam",
-  "description": "Spam protection for WordPress",
-  "author": "LittleBizzy",
-  "author_url": "https://www.littlebizzy.com",
-  "repo": "littlebizzy/anti-spam",
-  "icon_url": "https://avatars.githubusercontent.com/u/10787477",
-  "rating": 4.8,
-  "ratings_count": 100,
-  "last_updated": "2025-11-03",
-  "compatible": true
+    "slug": "anti-spam",
+    "name": "Anti-Spam",
+    "description": "Spam protection for WordPress",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/anti-spam",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "last_updated": "2025-11-03",
+    "compatible": true
   },
   {
     "slug": "benchpress",
@@ -351,6 +351,19 @@
     "compatible": true
   },
   {
+    "slug": "noindex-manager",
+    "name": "Noindex Manager",
+    "description": "Noindex thin WordPress content",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/noindex-manager",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 4.8,
+    "ratings_count": 100,
+    "last_updated": "2024-10-12",
+    "compatible": true
+  },
+  {
     "slug": "pods",
     "name": "Pods Framework",
     "description": "Pods is a framework for creating, managing, and deploying customized content types and fields",
@@ -371,19 +384,6 @@
     "author_url": "https://pressbooks.org",
     "repo": "pressbooks/pressbooks",
     "icon_url": "https://avatars.githubusercontent.com/u/4054717",
-    "rating": 4.8,
-    "ratings_count": 100,
-    "last_updated": "2024-10-12",
-    "compatible": true
-  },
-  {
-    "slug": "noindex-manager",
-    "name": "Noindex Manager",
-    "description": "Noindex thin WordPress content",
-    "author": "LittleBizzy",
-    "author_url": "https://www.littlebizzy.com",
-    "repo": "littlebizzy/noindex-manager",
-    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
     "rating": 4.8,
     "ratings_count": 100,
     "last_updated": "2024-10-12",
@@ -442,17 +442,17 @@
     "compatible": true
   },
   {
-  "slug": "secure-file-access",
-  "name": "Secure File Access",
-  "description": "Easy file downloads for WordPress",
-  "author": "LittleBizzy",
-  "author_url": "https://www.littlebizzy.com",
-  "repo": "littlebizzy/secure-file-access",
-  "icon_url": "https://avatars.githubusercontent.com/u/10787477",
-  "rating": 0,
-  "ratings_count": 0,
-  "last_updated": "2025-09-28",
-  "compatible": true
+    "slug": "secure-file-access",
+    "name": "Secure File Access",
+    "description": "Easy file downloads for WordPress",
+    "author": "LittleBizzy",
+    "author_url": "https://www.littlebizzy.com",
+    "repo": "littlebizzy/secure-file-access",
+    "icon_url": "https://avatars.githubusercontent.com/u/10787477",
+    "rating": 0,
+    "ratings_count": 0,
+    "last_updated": "2025-09-28",
+    "compatible": true
   },
   {
     "slug": "statcounter",
