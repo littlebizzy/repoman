@@ -160,13 +160,19 @@ function repoman_get_plugins_data() {
         return new WP_Error( 'file_malformed', sprintf( __( 'Error: the plugin-repos.json file is malformed (%s)', 'repoman' ), json_last_error_msg() ) );
     }
 
-    // check if decoded array is empty
-    if ( empty( $plugins ) ) {
+    // require a non-empty top-level array
+    if ( ! is_array( $plugins ) || empty( $plugins ) ) {
         return new WP_Error( 'file_empty', __( 'Error: the plugin-repos.json file is empty or contains no plugins', 'repoman' ) );
     }
 
-    // sanitize and fill missing fields
-    foreach ( $plugins as &$plugin ) {
+    // sanitize valid plugin entries and fill missing fields
+    $valid_plugins = array();
+
+    foreach ( $plugins as $plugin ) {
+        if ( ! is_array( $plugin ) ) {
+            continue;
+        }
+
         $plugin['slug'] = isset( $plugin['slug'] ) ? sanitize_title( $plugin['slug'] ) : 'unknown-slug';
         $plugin['repo'] = isset( $plugin['repo'] ) ? sanitize_text_field( $plugin['repo'] ) : '';
         $plugin['name'] = isset( $plugin['name'] ) ? sanitize_text_field( $plugin['name'] ) : __( 'unknown plugin', 'repoman' );
@@ -179,10 +185,15 @@ function repoman_get_plugins_data() {
         $plugin['active_installs'] = isset( $plugin['active_installs'] ) ? intval( $plugin['active_installs'] ) : 0;
         $plugin['compatible'] = isset( $plugin['compatible'] ) ? (bool) $plugin['compatible'] : false;
         $plugin['last_updated'] = isset( $plugin['last_updated'] ) ? sanitize_text_field( $plugin['last_updated'] ) : __( 'unknown', 'repoman' );
+        $valid_plugins[] = $plugin;
     }
 
-    // return the plugin array
-    return $plugins;
+    // return an error if no valid entries remain
+    if ( empty( $valid_plugins ) ) {
+        return new WP_Error( 'file_no_valid_plugins', __( 'Error: the plugin-repos.json file contains no valid plugin entries', 'repoman' ) );
+    }
+
+    return $valid_plugins;
 }
 
 // fetch plugin data with caching using transients
