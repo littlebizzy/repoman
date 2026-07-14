@@ -8,7 +8,7 @@ Install public repos to WordPress
 - rejects non-array top-level JSON values, skips malformed non-array entries, and returns an error when no valid plugin entries remain
 - requires repository values to contain exactly one GitHub `owner/repo` pair using supported owner and repository characters
 - prevents punctuation-only or otherwise empty sanitized search terms from matching plugin slugs
-- fixes indentation for `anti-spam` and `secure-file-access` and moves `noindex-manager` into alphabetical slug order
+- normalizes `plugin-repos.json` formatting and alphabetical ordering
 
 ### 2.0.1
 - added `littlebizzy/verified-customers`
