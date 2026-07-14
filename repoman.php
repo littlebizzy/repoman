@@ -449,6 +449,7 @@ function repoman_calculate_match_score( $plugin, $search_query ) {
     $plugin_slug = strtolower( $plugin['slug'] );
     $plugin_description = strtolower( $plugin['description'] );
     $search_query = strtolower( $search_query );
+    $search_slug = sanitize_title( $search_query );
     $search_terms = array_filter( explode( ' ', $search_query ) );
 
     // exact match on plugin name
@@ -462,18 +463,22 @@ function repoman_calculate_match_score( $plugin, $search_query ) {
     }
 
     // exact match on plugin slug
-    if ( $plugin_slug === sanitize_title( $search_query ) ) {
+    if ( $search_slug !== '' && $plugin_slug === $search_slug ) {
         $score += 80;
     }
 
     // partial match in plugin slug
-    if ( false !== strpos( $plugin_slug, sanitize_title( $search_query ) ) ) {
+    if ( $search_slug !== '' && false !== strpos( $plugin_slug, $search_slug ) ) {
         $score += 40;
     }
 
     // match terms in slug
     foreach ( $search_terms as $term ) {
         $sanitized_term = sanitize_title( $term );
+        if ( $sanitized_term === '' ) {
+            continue;
+        }
+
         if ( false !== strpos( $plugin_slug, $sanitized_term ) ) {
             $score += 15;
         }
