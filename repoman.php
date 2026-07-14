@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 2.1.2
+Version: 2.1.3
 Requires PHP: 7.0
 Tested up to: 6.9
 Author: LittleBizzy
@@ -617,6 +617,11 @@ function repoman_extend_search_results( $res, $action, $args ) {
         return $res;
     }
 
+    // only add repoman matches to the first search results page
+    if ( isset( $args->page ) && intval( $args->page ) > 1 ) {
+        return $res;
+    }
+
     // sanitize the search query
     $search_query = sanitize_text_field( urldecode( $args->search ) );
     $plugins = repoman_get_plugins_data_with_cache();
@@ -660,7 +665,6 @@ function repoman_extend_search_results( $res, $action, $args ) {
 
     // merge formatted plugins with the original ones
     $res->plugins = array_merge( $formatted_plugins, $original_plugins );
-    $res->info['results'] = count( $res->plugins );
 
     return $res;
 }
