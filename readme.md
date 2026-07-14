@@ -5,7 +5,7 @@ Install public repos to WordPress
 ## Changelog
 
 ### 2.1.2
-- limits GitHub ZIP availability checks to one response byte instead of downloading full archives
+- limits GitHub ZIP probe response bodies to one byte to reduce memory use during availability checks
 
 ### 2.1.1
 - handles `WP_Error` and non-200 GitHub API or ZIP responses before parsing metadata or accepting download URLs
