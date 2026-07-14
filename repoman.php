@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 2.1.3
+Version: 2.2.0
 Requires PHP: 7.0
 Tested up to: 6.9
 Author: LittleBizzy
@@ -243,8 +243,10 @@ function repoman_plugins_api_handler( $result, $action, $args ) {
             // prepare plugin response
             $plugin_info = repoman_prepare_plugin_information( $plugin );
 
-            // cache slug temporarily
-            set_transient( 'repoman_installing_plugin', $plugin['slug'], 15 * MINUTE_IN_SECONDS );
+            // associate this package with its slug for the current install request
+            if ( ! empty( $plugin_info->download_link ) ) {
+                repoman_register_install_package( $plugin_info->download_link, $plugin['slug'] );
+            }
 
             return (object) $plugin_info;
         }
@@ -568,47 +570,87 @@ function repoman_prepare_plugin_for_display( $plugin ) {
     );
 }
 
-// handle renaming of plugin folder after installation
-function repoman_rename_plugin_folder( $response, $hook_extra, $result ) {
-    // only run for plugin installs
-    if ( isset( $hook_extra['type'] ) && $hook_extra['type'] === 'plugin' ) {
+// associate repoman package urls with plugin slugs for the current request
+function repoman_register_install_package( $package, $slug = '' ) {
+    static $packages = array();
 
-        // get plugin slug from transient
-        $plugin_slug = get_transient( 'repoman_installing_plugin' );
+    $package = esc_url_raw( $package );
 
-        if ( ! $plugin_slug ) {
-            return $response;
-        }
+    if ( $package === '' ) {
+        return '';
+    }
 
-        // get destination path from result
-        if ( is_array( $result ) && isset( $result['destination'] ) ) {
-            $plugin_path = $result['destination'];
-        } else {
-            error_log( 'RepoMan Error: Invalid result format for plugin installation' );
-            return $response;
-        }
+    if ( $slug !== '' ) {
+        $slug = sanitize_title( $slug );
 
-        // build new path using plugin slug
-        $new_plugin_path = trailingslashit( dirname( $plugin_path ) ) . $plugin_slug;
-
-        // rename only if paths do not match
-        if ( basename( $plugin_path ) !== $plugin_slug ) {
-            if ( rename( $plugin_path, $new_plugin_path ) ) {
-                error_log( 'Renamed plugin folder from ' . $plugin_path . ' to ' . $new_plugin_path );
-                $response = $new_plugin_path;
-            } else {
-                error_log( 'Failed to rename plugin folder from ' . $plugin_path . ' to ' . $new_plugin_path );
-                return new WP_Error( 'rename_failed', __( 'Could not rename plugin directory', 'repoman' ) );
-            }
+        if ( $slug !== '' ) {
+            $packages[ $package ] = $slug;
         }
     }
 
-    // clear transient after install
-    delete_transient( 'repoman_installing_plugin' );
-
-    return $response;
+    return isset( $packages[ $package ] ) ? $packages[ $package ] : '';
 }
-add_filter( 'upgrader_post_install', 'repoman_rename_plugin_folder', 10, 3 );
+
+// attach the intended repoman slug to the matching plugin install request
+function repoman_add_install_package_options( $options ) {
+    if (
+        ! is_array( $options ) ||
+        empty( $options['package'] ) ||
+        empty( $options['hook_extra']['type'] ) ||
+        empty( $options['hook_extra']['action'] ) ||
+        $options['hook_extra']['type'] !== 'plugin' ||
+        $options['hook_extra']['action'] !== 'install'
+    ) {
+        return $options;
+    }
+
+    $plugin_slug = repoman_register_install_package( $options['package'] );
+
+    if ( $plugin_slug !== '' ) {
+        $options['hook_extra']['repoman_slug'] = $plugin_slug;
+    }
+
+    return $options;
+}
+add_filter( 'upgrader_package_options', 'repoman_add_install_package_options' );
+
+// rename the extracted github folder before wordpress chooses the install destination
+function repoman_select_plugin_source( $source, $remote_source, $upgrader, $hook_extra ) {
+    if ( empty( $hook_extra['repoman_slug'] ) ) {
+        return $source;
+    }
+
+    $plugin_slug = sanitize_title( $hook_extra['repoman_slug'] );
+
+    if ( $plugin_slug === '' || ! is_string( $source ) || $source === '' ) {
+        return $source;
+    }
+
+    $source = untrailingslashit( $source );
+
+    if ( basename( $source ) === $plugin_slug ) {
+        return trailingslashit( $source );
+    }
+
+    global $wp_filesystem;
+
+    if ( ! is_object( $wp_filesystem ) ) {
+        return new WP_Error( 'repoman_filesystem_unavailable', __( 'Could not access the WordPress filesystem', 'repoman' ) );
+    }
+
+    $new_source = trailingslashit( dirname( $source ) ) . $plugin_slug;
+
+    if ( $wp_filesystem->exists( $new_source ) ) {
+        return new WP_Error( 'repoman_folder_exists', __( 'The target plugin directory already exists', 'repoman' ) );
+    }
+
+    if ( ! $wp_filesystem->move( $source, $new_source ) ) {
+        return new WP_Error( 'repoman_rename_failed', __( 'Could not prepare the plugin directory', 'repoman' ) );
+    }
+
+    return trailingslashit( $new_source );
+}
+add_filter( 'upgrader_source_selection', 'repoman_select_plugin_source', 10, 4 );
 
 // extend search results to include plugins from the json file and prioritize them when relevant
 function repoman_extend_search_results( $res, $action, $args ) {
