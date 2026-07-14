@@ -294,6 +294,11 @@ function repoman_prepare_plugin_information( $plugin ) {
     return (object) $plugin_data;
 }
 
+// check whether a remote response completed successfully
+function repoman_is_successful_http_response( $response ) {
+    return ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200;
+}
+
 // get download link for plugin using github with automatic branch detection
 function repoman_get_plugin_download_link( $plugin ) {
 
@@ -333,6 +338,11 @@ function repoman_get_plugin_download_link( $plugin ) {
         if ( is_wp_error( $response ) ) {
             error_log( 'RepoMan Error: Unable to connect to github api for plugin ' . $plugin['slug'] . '. error: ' . $response->get_error_message() );
             $default_branch = 'master';
+        } elseif ( ! repoman_is_successful_http_response( $response ) ) {
+            $response_code = wp_remote_retrieve_response_code( $response );
+            $response_message = wp_remote_retrieve_response_message( $response );
+            error_log( 'RepoMan Error: GitHub API request failed for plugin ' . $plugin['slug'] . '. response: ' . $response_code . ' ' . $response_message );
+            $default_branch = 'master';
         } else {
             $body = wp_remote_retrieve_body( $response );
             $data = json_decode( $body, true );
@@ -359,7 +369,7 @@ function repoman_get_plugin_download_link( $plugin ) {
     ) );
 
     // handle error or fallback if zip not accessible
-    if ( is_wp_error( $get_response ) || wp_remote_retrieve_response_code( $get_response ) !== 200 ) {
+    if ( ! repoman_is_successful_http_response( $get_response ) ) {
         $error_message = is_wp_error( $get_response ) ? $get_response->get_error_message() : wp_remote_retrieve_response_message( $get_response );
         error_log( 'RepoMan Error: unable to access zip file at ' . $download_link . ' for plugin ' . $plugin['slug'] . '. response: ' . print_r( $error_message, true ) );
 
@@ -373,7 +383,7 @@ function repoman_get_plugin_download_link( $plugin ) {
                 'timeout' => 30,
             ) );
 
-            if ( ! is_wp_error( $fallback_response ) && wp_remote_retrieve_response_code( $fallback_response ) === 200 ) {
+            if ( repoman_is_successful_http_response( $fallback_response ) ) {
                 $download_link = $fallback_download_link;
                 $default_branch = $fallback_branch;
                 set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
@@ -387,7 +397,7 @@ function repoman_get_plugin_download_link( $plugin ) {
                     'timeout' => 30,
                 ) );
 
-                if ( ! is_wp_error( $main_response ) && wp_remote_retrieve_response_code( $main_response ) === 200 ) {
+                if ( repoman_is_successful_http_response( $main_response ) ) {
                     $download_link = $fallback_download_link;
                     $default_branch = $fallback_branch;
                     set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
@@ -406,7 +416,7 @@ function repoman_get_plugin_download_link( $plugin ) {
                 'timeout' => 30,
             ) );
 
-            if ( ! is_wp_error( $main_response ) && wp_remote_retrieve_response_code( $main_response ) === 200 ) {
+            if ( repoman_is_successful_http_response( $main_response ) ) {
                 $download_link = $fallback_download_link;
                 $default_branch = $fallback_branch;
                 set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
