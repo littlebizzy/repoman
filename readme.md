@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 2.1.1
+- handles `WP_Error` and non-200 GitHub API or ZIP responses before parsing metadata or accepting download URLs
+
 ### 2.1.0
 - rejects non-array top-level JSON values, skips malformed non-array entries, and returns an error when no valid plugin entries remain
 - requires repository values to contain exactly one GitHub `owner/repo` pair using supported owner and repository characters
