@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 2.1.3
+- prevents RepoMan plugins from repeating on later search pages and preserves WordPress.org result totals
+
 ### 2.1.2
 - limits GitHub ZIP probe response bodies to one byte to reduce memory use during availability checks
 
