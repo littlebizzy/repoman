@@ -303,9 +303,13 @@ function repoman_get_plugin_download_link( $plugin ) {
         return '';
     }
 
-    // extract owner and repo from repo string
+    // extract and validate the owner/repo string
     $parts = explode( '/', $plugin['repo'] );
-    if ( count( $parts ) < 2 ) {
+    if (
+        count( $parts ) !== 2 ||
+        ! preg_match( '/^[A-Za-z0-9][A-Za-z0-9-]*$/', $parts[0] ) ||
+        ! preg_match( '/^[A-Za-z0-9._-]+$/', $parts[1] )
+    ) {
         error_log( 'RepoMan Error: Invalid repository format for plugin ' . $plugin['slug'] );
         return '';
     }
