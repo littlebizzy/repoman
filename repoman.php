@@ -650,7 +650,7 @@ function repoman_select_plugin_source( $source, $remote_source, $upgrader, $hook
 
     return trailingslashit( $new_source );
 }
-add_filter( 'upgrader_source_selection', 'repoman_select_plugin_source', 10, 4 );
+add_filter( 'upgrader_source_selection', 'repoman_select_plugin_source', 20, 4 );
 
 // extend search results to include plugins from the json file and prioritize them when relevant
 function repoman_extend_search_results( $res, $action, $args ) {
