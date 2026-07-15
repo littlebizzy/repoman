@@ -4,7 +4,7 @@ Install public repos to WordPress
 
 ## Changelog
 
-### 2.2.0
+### 3.0.0
 - replaces the shared install transient and post-install folder rename with request-scoped package-to-slug mapping through the WordPress upgrader
 - validates each extracted plugin package before preparing its final slug-based folder
 - prevents overlapping installs from using the wrong slug while leaving unrelated plugin installs and updates untouched
@@ -202,7 +202,7 @@ Install public repos to WordPress
 - added error handing for json file and admin notices for clear user feedback
 - more efficient rendering of top/bottom pagination
 - display 36 plugins instead of 10 per page
-- added fallback values for missing keys in the plugin data (e.g., slug, name, icon_url, author) to ensure that all plugins display properly even if some data is missing
+- added fallback values for missing keys in the plugin data (e.g. slug, name, icon_url, author) to ensure that all plugins display properly even if some data is missing
 - improved structure and display of plugin cards, including star ratings, action buttons, and compatibility information
 - removed forced redirect to  "Repos" tab as it was unnecessary and caused redirect loop on Multisite
 
