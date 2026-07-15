@@ -167,6 +167,7 @@ function repoman_get_plugins_data() {
 
     // sanitize valid plugin entries and fill missing fields
     $valid_plugins = array();
+    $seen_slugs = array();
 
     foreach ( $plugins as $plugin ) {
         if ( ! is_array( $plugin ) ) {
@@ -174,6 +175,13 @@ function repoman_get_plugins_data() {
         }
 
         $plugin['slug'] = isset( $plugin['slug'] ) ? sanitize_title( $plugin['slug'] ) : 'unknown-slug';
+
+        if ( isset( $seen_slugs[ $plugin['slug'] ] ) ) {
+            error_log( 'RepoMan Error: Duplicate plugin slug skipped: ' . $plugin['slug'] );
+            continue;
+        }
+
+        $seen_slugs[ $plugin['slug'] ] = true;
         $plugin['repo'] = isset( $plugin['repo'] ) ? sanitize_text_field( $plugin['repo'] ) : '';
         $plugin['name'] = isset( $plugin['name'] ) ? sanitize_text_field( $plugin['name'] ) : __( 'unknown plugin', 'repoman' );
         $plugin['description'] = isset( $plugin['description'] ) ? wp_kses_post( $plugin['description'] ) : __( 'no description available', 'repoman' );
