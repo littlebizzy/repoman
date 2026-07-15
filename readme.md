@@ -5,7 +5,9 @@ Install public repos to WordPress
 ## Changelog
 
 ### 2.2.0
-- carries each RepoMan plugin slug through its own WordPress install request and prepares the final plugin folder before installation
+- replaces the shared install transient and post-install folder rename with request-scoped package-to-slug mapping through the WordPress upgrader
+- validates each extracted plugin package before preparing its final slug-based folder
+- prevents overlapping installs from using the wrong slug while leaving unrelated plugin installs and updates untouched
 
 ### 2.1.3
 - prevents RepoMan plugins from repeating on later search pages and preserves WordPress.org result totals
