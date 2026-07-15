@@ -2,6 +2,20 @@
 
 Install public repos to WordPress
 
+## Description
+
+RepoMan adds selected WordPress plugins hosted in public GitHub repositories to the native **Plugins > Add New** search results.
+
+When a search matches an entry in the bundled `plugin-repos.json` index, RepoMan displays the matching repositories ahead of WordPress.org results using standard WordPress plugin cards. Plugins are installed directly from their GitHub branch archives.
+
+RepoMan automatically detects each repository’s default branch, with `master` and `main` used as fallbacks when necessary. During installation, the extracted GitHub archive directory is renamed to the configured plugin slug before WordPress selects the final installation destination.
+
+Hosts, agencies, and developers can replace the bundled repository index by defining the `REPOMAN_PLUGIN_INDEX_PATH` constant with the path to a readable custom `plugin-repos.json` file. This allows a privately maintained plugin catalog to be used without modifying or forking RepoMan.
+
+RepoMan also prevents WordPress.org update packages from being offered for plugins whose main file contains a `GitHub Plugin URI` or `Update URI` header, along with several explicitly protected plugin slugs. This protection applies whether those plugins are active or inactive.
+
+RepoMan only exposes repositories listed in the bundled or configured index. It does not search all of GitHub, access private repositories, assess third-party code, or provide ongoing GitHub updates by itself.
+
 ## Changelog
 
 ### 3.0.1
