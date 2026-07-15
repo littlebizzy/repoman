@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 3.0.0
+Version: 3.0.1
 Requires PHP: 7.0
 Tested up to: 6.9
 Author: LittleBizzy
