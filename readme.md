@@ -4,6 +4,9 @@ Install public repos to WordPress
 
 ## Changelog
 
+### 3.0.1
+- removes unused placeholder rating and rating-count values from the bundled plugin index while retaining zero-value defaults required by WordPress plugin cards
+
 ### 3.0.0
 - removes the shared `repoman_installing_plugin` transient and `upgrader_post_install` folder rename used by earlier releases
 - maps each GitHub package URL to its configured plugin slug for the current PHP request and passes that slug through `upgrader_package_options` only for new plugin installs
