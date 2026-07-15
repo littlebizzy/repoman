@@ -174,7 +174,12 @@ function repoman_get_plugins_data() {
             continue;
         }
 
-        $plugin['slug'] = isset( $plugin['slug'] ) ? sanitize_title( $plugin['slug'] ) : 'unknown-slug';
+        $plugin['slug'] = isset( $plugin['slug'] ) ? sanitize_title( $plugin['slug'] ) : '';
+
+        if ( $plugin['slug'] === '' ) {
+            error_log( 'RepoMan Error: Plugin entry with an empty slug skipped' );
+            continue;
+        }
 
         if ( isset( $seen_slugs[ $plugin['slug'] ] ) ) {
             error_log( 'RepoMan Error: Duplicate plugin slug skipped: ' . $plugin['slug'] );
