@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 3.0.1
+Version: 3.0.2
 Requires PHP: 7.0
 Tested up to: 7.0
 Author: LittleBizzy
@@ -27,50 +27,25 @@ add_filter( 'gu_override_dot_org', function( $overrides ) {
     return $overrides;
 }, 999 );
 
-// scan main plugin file for 'GitHub Plugin URI' string
-function scan_plugin_main_file_for_github_uri( $plugin_file ) {
+// scan main plugin file for supported update headers
+function scan_plugin_main_file_for_update_headers( $plugin_file ) {
     $plugin_file_path = WP_PLUGIN_DIR . '/' . $plugin_file;
 
-    // check if file exists and is readable
+    // plugin files may temporarily disappear during installs, updates, or removals
     if ( ! file_exists( $plugin_file_path ) || ! is_readable( $plugin_file_path ) ) {
-        error_log( 'Plugin file does not exist or is not readable: ' . $plugin_file_path );
         return false;
     }
 
     // read file contents
     $file_content = @file_get_contents( $plugin_file_path );
 
-    // check if reading failed
+    // silently skip files that cannot be read
     if ( $file_content === false ) {
-        error_log( 'Failed to read plugin file: ' . $plugin_file_path );
         return false;
     }
 
-    // look for expected header in file contents
-    return strpos( $file_content, 'GitHub Plugin URI' ) !== false;
-}
-
-// scan main plugin file for 'Update URI' string
-function scan_plugin_main_file_for_update_uri( $plugin_file ) {
-    $plugin_file_path = WP_PLUGIN_DIR . '/' . $plugin_file;
-
-    // check if file exists and is readable
-    if ( ! file_exists( $plugin_file_path ) || ! is_readable( $plugin_file_path ) ) {
-        error_log( 'Plugin file does not exist or is not readable: ' . $plugin_file_path );
-        return false;
-    }
-
-    // read file contents
-    $file_content = @file_get_contents( $plugin_file_path );
-
-    // check if reading failed
-    if ( $file_content === false ) {
-        error_log( 'Failed to read plugin file: ' . $plugin_file_path );
-        return false;
-    }
-
-    // look for expected header in file contents
-    return strpos( $file_content, 'Update URI' ) !== false;
+    // look for supported update headers in file contents
+    return strpos( $file_content, 'GitHub Plugin URI' ) !== false || strpos( $file_content, 'Update URI' ) !== false;
 }
 
 // array of specific plugin slugs to block updates
@@ -97,8 +72,8 @@ function dynamic_block_plugin_updates( $overrides ) {
         // get plugin slug from its path
         $slug = dirname( $plugin_file );
 
-        // check if file has relevant header or matches a blocked slug
-        if ( scan_plugin_main_file_for_github_uri( $plugin_file ) || scan_plugin_main_file_for_update_uri( $plugin_file ) || in_array( $slug, $blocked_slugs, true ) ) {
+        // check blocked slugs before scanning the plugin file
+        if ( in_array( $slug, $blocked_slugs, true ) || scan_plugin_main_file_for_update_headers( $plugin_file ) ) {
             $overrides[] = $plugin_file;
         }
     }
