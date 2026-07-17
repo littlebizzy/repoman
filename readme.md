@@ -18,6 +18,11 @@ RepoMan only exposes repositories listed in the bundled or configured index. It 
 
 ## Changelog
 
+### 3.0.4
+- caches GitHub branches only after confirming that their ZIP archives are accessible
+- replaces stale cached branches with a working `master` or `main` fallback and clears the cache when no tested branch is available
+- distinguishes malformed GitHub API JSON from successful responses that omit a usable default branch
+
 ### 3.0.3
 - replaces raw string matching with WordPress's native `get_file_data()` parser for `GitHub Plugin URI` and `Update URI` metadata
 - limits header inspection to the first 8 KB while continuing to silently skip plugin files that disappear or become unreadable during plugin operations
