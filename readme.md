@@ -21,6 +21,7 @@ RepoMan only exposes repositories listed in the bundled or configured index. It 
 ### 3.0.2
 - silently skips plugin files that temporarily disappear or become unreadable during normal plugin installation, update, or removal operations
 - scans each plugin main file once for both `GitHub Plugin URI` and `Update URI` headers
+- checks explicitly protected plugin slugs before scanning plugin files to avoid unnecessary file reads
 
 ### 3.0.1
 - removes unused placeholder rating and rating-count values from the bundled plugin index while retaining zero-value defaults required by WordPress plugin cards
