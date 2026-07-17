@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 3.0.4
+Version: 3.0.5
 Requires PHP: 7.0
 Tested up to: 7.0
 Author: LittleBizzy
@@ -28,7 +28,7 @@ add_filter( 'gu_override_dot_org', function( $overrides ) {
 }, 999 );
 
 // parse supported update headers from main plugin file
-function scan_plugin_main_file_for_update_headers( $plugin_file ) {
+function repoman_scan_plugin_main_file_for_update_headers( $plugin_file ) {
     $plugin_file_path = WP_PLUGIN_DIR . '/' . $plugin_file;
 
     // plugin files may temporarily disappear during installs, updates, or removals
@@ -49,7 +49,7 @@ function scan_plugin_main_file_for_update_headers( $plugin_file ) {
 }
 
 // array of specific plugin slugs to block updates
-function get_blocked_plugin_slugs() {
+function repoman_get_blocked_plugin_slugs() {
     return array(
         'repoman',
         'git-updater',
@@ -60,12 +60,12 @@ function get_blocked_plugin_slugs() {
 }
 
 // disable WordPress.org for plugins with 'GitHub Plugin URI', 'Update URI', and specified slugs
-function dynamic_block_plugin_updates( $overrides ) {
+function repoman_dynamic_block_plugin_updates( $overrides ) {
     // get all installed plugins
     $all_plugins = get_plugins();
 
     // get array of blocked slugs
-    $blocked_slugs = get_blocked_plugin_slugs();
+    $blocked_slugs = repoman_get_blocked_plugin_slugs();
 
     // loop through each plugin
     foreach ( $all_plugins as $plugin_file => $plugin_data ) {
@@ -73,17 +73,17 @@ function dynamic_block_plugin_updates( $overrides ) {
         $slug = dirname( $plugin_file );
 
         // check blocked slugs before scanning the plugin file
-        if ( in_array( $slug, $blocked_slugs, true ) || scan_plugin_main_file_for_update_headers( $plugin_file ) ) {
+        if ( in_array( $slug, $blocked_slugs, true ) || repoman_scan_plugin_main_file_for_update_headers( $plugin_file ) ) {
             $overrides[] = $plugin_file;
         }
     }
 
     return $overrides;
 }
-add_filter( 'gu_override_dot_org', 'dynamic_block_plugin_updates', 999 );
+add_filter( 'gu_override_dot_org', 'repoman_dynamic_block_plugin_updates', 999 );
 
 // apply blocklist even if plugins are deactivated
-function dynamic_block_deactivated_plugin_updates( $transient ) {
+function repoman_dynamic_block_deactivated_plugin_updates( $transient ) {
     // get override list from filter
     $overrides = apply_filters( 'gu_override_dot_org', [] );
 
@@ -96,7 +96,7 @@ function dynamic_block_deactivated_plugin_updates( $transient ) {
 
     return $transient;
 }
-add_filter( 'site_transient_update_plugins', 'dynamic_block_deactivated_plugin_updates' );
+add_filter( 'site_transient_update_plugins', 'repoman_dynamic_block_deactivated_plugin_updates' );
 
 // get plugin index path
 function repoman_get_plugin_index_path() {
