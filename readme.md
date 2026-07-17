@@ -18,6 +18,10 @@ RepoMan only exposes repositories listed in the bundled or configured index. It 
 
 ## Changelog
 
+### 3.0.5
+- prefixes the remaining globally scoped helper functions with `repoman_` to reduce function-name collision risk
+- updates all internal callbacks and call sites without changing plugin behavior
+
 ### 3.0.4
 - caches GitHub branches only after confirming that their ZIP archives are accessible
 - replaces stale cached branches with a working `master` or `main` fallback and clears the cache when no tested branch is available
