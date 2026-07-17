@@ -18,6 +18,10 @@ RepoMan only exposes repositories listed in the bundled or configured index. It 
 
 ## Changelog
 
+### 3.0.3
+- replaces raw string matching with WordPress's native `get_file_data()` parser for `GitHub Plugin URI` and `Update URI` metadata
+- limits header inspection to the first 8 KB while continuing to silently skip plugin files that disappear or become unreadable during plugin operations
+
 ### 3.0.2
 - silently skips plugin files that temporarily disappear or become unreadable during normal plugin installation, update, or removal operations
 - scans each plugin main file once for both `GitHub Plugin URI` and `Update URI` headers
