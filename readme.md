@@ -18,6 +18,10 @@ RepoMan only exposes repositories listed in the bundled or configured index. It 
 
 ## Changelog
 
+### 3.0.6
+- recognizes GitHub API rate-limit responses and silently falls back to verified `master` or `main` ZIP archives instead of logging expected 403 or 429 errors
+- skips further GitHub API branch lookups during the same request after rate limiting is detected
+
 ### 3.0.5
 - prefixes the remaining globally scoped helper functions with `repoman_` to reduce function-name collision risk
 - updates all internal callbacks and call sites without changing plugin behavior
