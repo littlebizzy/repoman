@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 3.0.3
+Version: 3.0.4
 Requires PHP: 7.0
 Tested up to: 7.0
 Author: LittleBizzy
@@ -315,9 +315,11 @@ function repoman_get_plugin_download_link( $plugin ) {
     // check for cached default branch
     $cache_key = 'repoman_default_branch_' . $owner . '_' . $repo;
     $default_branch = get_transient( $cache_key );
+    $cache_branch = false;
 
     // fetch default branch if not cached
     if ( $default_branch === false ) {
+        $cache_branch = true;
         $api_url = "https://api.github.com/repos/{$owner}/{$repo}";
         $response = wp_remote_get( $api_url, array(
             'headers' => array( 'user-agent' => 'RepoMan' ),
@@ -337,16 +339,21 @@ function repoman_get_plugin_download_link( $plugin ) {
             $body = wp_remote_retrieve_body( $response );
             $data = json_decode( $body, true );
 
-            if ( json_last_error() === JSON_ERROR_NONE && isset( $data['default_branch'] ) ) {
-                $default_branch = sanitize_text_field( $data['default_branch'] );
-            } else {
+            if ( json_last_error() !== JSON_ERROR_NONE ) {
                 error_log( 'RepoMan Error: Unable to detect default branch for plugin ' . $plugin['slug'] . '. json error: ' . json_last_error_msg() );
                 $default_branch = 'master';
+            } elseif ( ! isset( $data['default_branch'] ) || ! is_string( $data['default_branch'] ) ) {
+                error_log( 'RepoMan Error: GitHub API response did not include a usable default branch for plugin ' . $plugin['slug'] );
+                $default_branch = 'master';
+            } else {
+                $default_branch = sanitize_text_field( $data['default_branch'] );
+
+                if ( $default_branch === '' ) {
+                    error_log( 'RepoMan Error: GitHub API response did not include a usable default branch for plugin ' . $plugin['slug'] );
+                    $default_branch = 'master';
+                }
             }
         }
-
-        // cache the result for 12 hours
-        set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
     }
 
     // build initial download link
@@ -359,8 +366,12 @@ function repoman_get_plugin_download_link( $plugin ) {
         'limit_response_size' => 1,
     ) );
 
-    // handle error or fallback if zip not accessible
-    if ( ! repoman_is_successful_http_response( $get_response ) ) {
+    // cache only branches whose zip files are accessible
+    if ( repoman_is_successful_http_response( $get_response ) ) {
+        if ( $cache_branch ) {
+            set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
+        }
+    } else {
         $error_message = is_wp_error( $get_response ) ? $get_response->get_error_message() : wp_remote_retrieve_response_message( $get_response );
         error_log( 'RepoMan Error: unable to access zip file at ' . $download_link . ' for plugin ' . $plugin['slug'] . '. response: ' . print_r( $error_message, true ) );
 
@@ -395,6 +406,7 @@ function repoman_get_plugin_download_link( $plugin ) {
                     $default_branch = $fallback_branch;
                     set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
                 } else {
+                    delete_transient( $cache_key );
                     error_log( 'RepoMan Error: Unable to access zip file at ' . $fallback_download_link . ' for plugin ' . $plugin['slug'] );
                     return '';
                 }
@@ -415,6 +427,7 @@ function repoman_get_plugin_download_link( $plugin ) {
                 $default_branch = $fallback_branch;
                 set_transient( $cache_key, $default_branch, 12 * HOUR_IN_SECONDS );
             } else {
+                delete_transient( $cache_key );
                 error_log( 'RepoMan Error: Unable to access zip file at ' . $fallback_download_link . ' for plugin ' . $plugin['slug'] );
                 return '';
             }
