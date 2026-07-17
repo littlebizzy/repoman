@@ -3,7 +3,7 @@
 Plugin Name: RepoMan
 Plugin URI: https://www.littlebizzy.com/plugins/repoman
 Description: Install public repos to WordPress
-Version: 3.0.2
+Version: 3.0.3
 Requires PHP: 7.0
 Tested up to: 7.0
 Author: LittleBizzy
@@ -27,7 +27,7 @@ add_filter( 'gu_override_dot_org', function( $overrides ) {
     return $overrides;
 }, 999 );
 
-// scan main plugin file for supported update headers
+// parse supported update headers from main plugin file
 function scan_plugin_main_file_for_update_headers( $plugin_file ) {
     $plugin_file_path = WP_PLUGIN_DIR . '/' . $plugin_file;
 
@@ -36,16 +36,16 @@ function scan_plugin_main_file_for_update_headers( $plugin_file ) {
         return false;
     }
 
-    // read file contents
-    $file_content = @file_get_contents( $plugin_file_path );
+    // parse actual plugin headers using the WordPress header reader
+    $plugin_headers = @get_file_data(
+        $plugin_file_path,
+        array(
+            'GitHubPluginURI' => 'GitHub Plugin URI',
+            'UpdateURI' => 'Update URI',
+        )
+    );
 
-    // silently skip files that cannot be read
-    if ( $file_content === false ) {
-        return false;
-    }
-
-    // look for supported update headers in file contents
-    return strpos( $file_content, 'GitHub Plugin URI' ) !== false || strpos( $file_content, 'Update URI' ) !== false;
+    return ! empty( $plugin_headers['GitHubPluginURI'] ) || ! empty( $plugin_headers['UpdateURI'] );
 }
 
 // array of specific plugin slugs to block updates
